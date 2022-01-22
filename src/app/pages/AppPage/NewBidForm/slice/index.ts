@@ -1,16 +1,21 @@
 import { PayloadAction } from '@reduxjs/toolkit';
+import { formatUnits } from 'ethers/lib/utils';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
 import { newBidSaga } from './saga';
 import { NewBidState } from './types';
 
-export const initialState: NewBidState = {};
+export const initialState: NewBidState = {
+  userUstBalance: 0,
+};
 
 const slice = createSlice({
   name: 'newBid',
   initialState,
   reducers: {
-    someAction(state, action: PayloadAction<any>) {},
+    setUserUstBalance(state, action: PayloadAction<number>) {
+      state.userUstBalance = Number(formatUnits(action.payload, 6));
+    },
   },
 });
 

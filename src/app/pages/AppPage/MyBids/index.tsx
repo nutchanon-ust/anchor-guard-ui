@@ -43,6 +43,8 @@ export function MyBids() {
       dispatch(actions.load());
     }
   });
+
+  const handleCancelBid = record => {};
   return (
     <Table dataSource={myBids} rowKey={bid => bid.id}>
       <Column title="Premium" dataIndex="premium" key="premium" />
@@ -65,7 +67,9 @@ export function MyBids() {
             {record.bidStatus !== 'Active' && (
               <Action type="primary">Activate</Action>
             )}
-            <Action danger>Cancel</Action>
+            <Action danger onClick={() => handleCancelBid(record)}>
+              Cancel
+            </Action>
           </>
         )}
       />

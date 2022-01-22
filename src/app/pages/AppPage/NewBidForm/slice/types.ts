@@ -1,2 +1,4 @@
 /* --- STATE --- */
-export interface NewBidState {}
+export interface NewBidState {
+  userUstBalance: number;
+}

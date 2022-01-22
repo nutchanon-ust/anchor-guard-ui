@@ -1,6 +1,8 @@
 export const ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS =
   'terra1e25zllgag7j9xsun3me4stnye2pcg66234je3u';
 
+export const BLUNA_ADDRESS = 'terra1kc87mu460fwkqte29rquh4hc20m54fxwtsx7gp';
+
 export const FALLBACK_GAS_PRICE_COLUMNBUS = {
   uluna: '0.01133',
   usdr: '0.104938',
