@@ -52,3 +52,20 @@ export function fabricateNewBid(
     ),
   ];
 }
+
+export function fabricateCancelBid(
+  walletAddress: string,
+  bidIdx: string,
+): MsgExecuteContract[] {
+  return [
+    new MsgExecuteContract(
+      walletAddress,
+      ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS,
+      {
+        retract_bid: {
+          bid_idx: bidIdx,
+        },
+      },
+    ),
+  ];
+}

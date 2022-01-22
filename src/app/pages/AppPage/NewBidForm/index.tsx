@@ -7,25 +7,14 @@ import * as React from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { messages } from './messages';
-import { Form, Input, Button, Checkbox, InputNumber } from 'antd';
-import {
-  BankAPI,
-  CreateTxOptions,
-  Dec,
-  Fee,
-  LCDClient,
-  MsgExecuteContract,
-  TreasuryAPI,
-} from '@terra-money/terra.js';
+import { Form, Button, InputNumber } from 'antd';
+import { CreateTxOptions, Fee, LCDClient } from '@terra-money/terra.js';
 import {
   ConnectedWallet,
   useConnectedWallet,
   useLCDClient,
 } from '@terra-money/wallet-provider';
-import {
-  ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS,
-  BLUNA_ADDRESS,
-} from 'app/constants';
+import { BLUNA_ADDRESS } from 'app/constants';
 import { useCallback, useEffect, useMemo } from 'react';
 import { estimateGasFee, fabricateNewBid } from 'utils/tx-helper';
 import { parseUnits } from 'ethers/lib/utils';
@@ -41,13 +30,7 @@ export function NewBidForm(props: Props) {
   const connectedWallet = useConnectedWallet() as ConnectedWallet;
   const walletAddress = connectedWallet?.walletAddress;
   const network = connectedWallet?.network;
-  const lcd = useMemo(() => {
-    if (!network) return;
-    return new LCDClient({
-      chainID: network.chainID,
-      URL: network.lcd,
-    });
-  }, [network?.chainID, network?.lcd]);
+  const lcd = useLCDClient();
 
   const [form] = Form.useForm();
   const dispatch = useDispatch();
@@ -75,8 +58,6 @@ export function NewBidForm(props: Props) {
       String(form.getFieldValue('bidAmount')),
       6,
     ).toNumber();
-    console.log('premium', premium);
-    console.log('ustAmount', ustAmount);
     const msgs = fabricateNewBid(
       walletAddress,
       premium,
@@ -101,7 +82,6 @@ export function NewBidForm(props: Props) {
   };
 
   const userUstBalance = useSelector(selectUserUstBalance);
-  console.log('userUstBalance', userUstBalance);
   return (
     <Form
       form={form}

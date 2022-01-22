@@ -30,6 +30,7 @@ import reportWebVitals from 'reportWebVitals';
 
 // Initialize languages
 import './locales/i18n';
+import { getChainOptions, WalletProvider } from '@terra-money/wallet-provider';
 
 // Observe loading of Inter (to remove 'Inter', remove the <link> tag in
 // the index.html file and this observer)
@@ -43,18 +44,22 @@ openSansObserver.load().then(() => {
 const store = configureAppStore();
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 
-ReactDOM.render(
-  <Provider store={store}>
-    <ThemeProvider>
-      <HelmetProvider>
-        <React.StrictMode>
-          <App />
-        </React.StrictMode>
-      </HelmetProvider>
-    </ThemeProvider>
-  </Provider>,
-  MOUNT_NODE,
-);
+getChainOptions().then(chainOptions => {
+  ReactDOM.render(
+    <WalletProvider {...chainOptions}>
+      <Provider store={store}>
+        <ThemeProvider>
+          <HelmetProvider>
+            <React.StrictMode>
+              <App />
+            </React.StrictMode>
+          </HelmetProvider>
+        </ThemeProvider>
+      </Provider>
+    </WalletProvider>,
+    MOUNT_NODE,
+  );
+});
 
 // Hot reloadable translation json files
 if (module.hot) {

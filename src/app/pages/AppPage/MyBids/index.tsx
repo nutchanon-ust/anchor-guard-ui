@@ -8,13 +8,17 @@ import {
 } from './slice/selectors';
 import { useMyBidsSlice } from './slice';
 import { Table, Button } from 'antd';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
+import { useConnectedWallet, useLCDClient } from '@terra-money/wallet-provider';
+import { estimateGasFee, fabricateCancelBid } from 'utils/tx-helper';
+import { CreateTxOptions, Fee, LCDClient } from '@terra-money/terra.js';
 
 const { Column } = Table;
 
 export function MyBids() {
   const { actions } = useMyBidsSlice();
   const connectedWallet = useConnectedWallet();
+  const network = connectedWallet?.network;
+  const lcd = useLCDClient();
 
   const myBids = useSelector(selectMyBids);
   const isLoading = useSelector(selectLoading);
@@ -44,7 +48,27 @@ export function MyBids() {
     }
   });
 
-  const handleCancelBid = record => {};
+  const handleCancelBid = async bidIdx => {
+    if (!walletAddress || !connectedWallet) return;
+    const msgs = fabricateCancelBid(walletAddress, bidIdx);
+    const { estimatedFeeGas, coinAmount } = await estimateGasFee(
+      walletAddress,
+      msgs,
+      lcd,
+    );
+    const tx: CreateTxOptions = {
+      msgs,
+      fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
+    };
+    try {
+      const result = await connectedWallet.post(tx);
+      console.log(result);
+      dispatch(actions.load());
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <Table dataSource={myBids} rowKey={bid => bid.id}>
       <Column title="Premium" dataIndex="premium" key="premium" />
@@ -67,7 +91,7 @@ export function MyBids() {
             {record.bidStatus !== 'Active' && (
               <Action type="primary">Activate</Action>
             )}
-            <Action danger onClick={() => handleCancelBid(record)}>
+            <Action danger onClick={() => handleCancelBid(record.id)}>
               Cancel
             </Action>
           </>
@@ -80,3 +104,6 @@ export function MyBids() {
 const Action = styled(Button)`
   margin: 5px;
 `;
+function useMemo(arg0: () => any, arg1: any[]) {
+  throw new Error('Function not implemented.');
+}
