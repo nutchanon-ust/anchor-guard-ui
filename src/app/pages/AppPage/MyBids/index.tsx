@@ -28,7 +28,7 @@ export function MyBids() {
   });
 
   return (
-    <Table dataSource={myBids}>
+    <Table dataSource={myBids} rowKey={bid => bid.id}>
       <Column title="Premium" dataIndex="premium" key="premium" />
       <Column
         title="Bid Remaining"

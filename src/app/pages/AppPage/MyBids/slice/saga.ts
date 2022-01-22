@@ -2,6 +2,7 @@ import { call, put, select, takeLatest, delay } from 'redux-saga/effects';
 import { myBidsActions as actions } from '.';
 import { LCDClient } from '@terra-money/terra.js';
 import { formatUnits } from 'ethers/lib/utils';
+import { ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS } from 'app/constants';
 
 export function* getMyBids() {
   console.log('terra');
@@ -9,10 +10,9 @@ export function* getMyBids() {
     URL: 'https://lcd.terra.dev',
     chainID: 'columbus-5',
   });
-  const anchorLiquidationAddress =
-    'terra1e25zllgag7j9xsun3me4stnye2pcg66234je3u';
+
   const result = yield terra.wasm.contractQuery(
-    anchorLiquidationAddress,
+    ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS,
     {
       bids_by_user: {
         collateral_token: 'terra1kc87mu460fwkqte29rquh4hc20m54fxwtsx7gp',
