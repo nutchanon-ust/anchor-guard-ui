@@ -16,7 +16,7 @@ export function* getMyBids() {
     {
       bids_by_user: {
         collateral_token: 'terra1kc87mu460fwkqte29rquh4hc20m54fxwtsx7gp',
-        bidder: 'terra15hgp9c7e7le2t4kznjhn2fnv44fqhw29rjwuns',
+        bidder: 'terra1f0qcsymjggykf9dqgte2dgeyjn8p4slvjleweg',
       },
     }, // query msg
   );

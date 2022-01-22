@@ -4,6 +4,7 @@ import { NavBar } from 'app/components/NavBar';
 import { PageWrapper } from 'app/components/PageWrapper';
 import { Row, Col } from 'antd';
 import { MyBids } from './MyBids';
+import { NewBidForm } from './NewBidForm';
 
 export function AppPage() {
   return (
@@ -16,6 +17,7 @@ export function AppPage() {
         />
       </Helmet>
       <PageWrapper>
+        <NewBidForm />
         <MyBids />
       </PageWrapper>
     </>
