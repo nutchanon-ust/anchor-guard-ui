@@ -3,6 +3,7 @@ import { myBidsActions as actions } from '.';
 import { LCDClient } from '@terra-money/terra.js';
 import { formatUnits } from 'ethers/lib/utils';
 import { ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS } from 'app/constants';
+import { selectWalletAddress } from './selectors';
 
 export function* getMyBids() {
   console.log('terra');
@@ -11,28 +12,33 @@ export function* getMyBids() {
     chainID: 'columbus-5',
   });
 
-  const result = yield terra.wasm.contractQuery(
-    ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS,
-    {
-      bids_by_user: {
-        collateral_token: 'terra1kc87mu460fwkqte29rquh4hc20m54fxwtsx7gp',
-        bidder: 'terra1f0qcsymjggykf9dqgte2dgeyjn8p4slvjleweg',
-      },
-    }, // query msg
-  );
-  if (result) {
-    console.log(result);
-    yield put(
-      actions.loaded(
-        result.bids.map(each => ({
-          id: each.idx,
-          premium: `${each.premium_slot}%`,
-          bidRemaining: formatUnits(each.amount, 6),
-          bidStatus: each.wait_end === null ? 'Active' : 'Pending',
-          amountFilled: formatUnits(each.pending_liquidated_collateral, 6),
-        })),
-      ),
+  const walletAddress: string = yield select(selectWalletAddress);
+  if (walletAddress) {
+    const result = yield terra.wasm.contractQuery(
+      ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS,
+      {
+        bids_by_user: {
+          collateral_token: 'terra1kc87mu460fwkqte29rquh4hc20m54fxwtsx7gp',
+          bidder: walletAddress,
+        },
+      }, // query msg
     );
+    if (result) {
+      console.log(result);
+      yield put(
+        actions.loaded(
+          result.bids.map(each => ({
+            id: each.idx,
+            premium: `${each.premium_slot}%`,
+            bidRemaining: formatUnits(each.amount, 6),
+            bidStatus: each.wait_end === null ? 'Active' : 'Pending',
+            amountFilled: formatUnits(each.pending_liquidated_collateral, 6),
+          })),
+        ),
+      );
+    } else {
+      yield put(actions.loaded([]));
+    }
   } else {
     yield put(actions.loaded([]));
   }

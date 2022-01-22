@@ -1,17 +1,24 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectLoading, selectMyBids } from './slice/selectors';
+import {
+  selectLoading,
+  selectMyBids,
+  selectWalletAddress,
+} from './slice/selectors';
 import { useMyBidsSlice } from './slice';
 import { Table, Button } from 'antd';
+import { useConnectedWallet } from '@terra-money/wallet-provider';
 
 const { Column } = Table;
 
 export function MyBids() {
   const { actions } = useMyBidsSlice();
+  const connectedWallet = useConnectedWallet();
 
   const myBids = useSelector(selectMyBids);
   const isLoading = useSelector(selectLoading);
+  const walletAddress = useSelector(selectWalletAddress);
 
   const dispatch = useDispatch();
 
@@ -27,6 +34,15 @@ export function MyBids() {
     }
   });
 
+  useEffect(() => {
+    if (connectedWallet && connectedWallet.walletAddress !== walletAddress) {
+      dispatch(actions.changeWalletAddress(connectedWallet.walletAddress));
+      dispatch(actions.load());
+    } else if (!connectedWallet && walletAddress !== null) {
+      dispatch(actions.changeWalletAddress(null));
+      dispatch(actions.load());
+    }
+  });
   return (
     <Table dataSource={myBids} rowKey={bid => bid.id}>
       <Column title="Premium" dataIndex="premium" key="premium" />

@@ -7,6 +7,7 @@ import { MyBidsState, Bid } from './types';
 export const initialState: MyBidsState = {
   myBids: [],
   loading: false,
+  walletAddress: null,
 };
 
 const slice = createSlice({
@@ -21,6 +22,9 @@ const slice = createSlice({
       const myBids = action.payload;
       state.myBids = myBids;
       state.loading = false;
+    },
+    changeWalletAddress(state, action: PayloadAction<string | null>) {
+      state.walletAddress = action.payload;
     },
   },
 });

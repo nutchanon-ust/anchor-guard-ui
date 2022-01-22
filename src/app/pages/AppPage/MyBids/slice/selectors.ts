@@ -15,3 +15,8 @@ export const selectMyBids = createSelector(
   [selectDomain],
   myBidsState => myBidsState.myBids,
 );
+
+export const selectWalletAddress = createSelector(
+  [selectDomain],
+  myBidsState => myBidsState.walletAddress,
+);

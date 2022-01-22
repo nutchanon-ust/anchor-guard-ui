@@ -4,6 +4,7 @@ import { Repo } from 'types/Repo';
 export interface MyBidsState {
   myBids: Bid[];
   loading: boolean;
+  walletAddress: string | null;
 }
 
 export interface Bid {
