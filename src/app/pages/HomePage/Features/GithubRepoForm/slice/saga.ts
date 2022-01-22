@@ -4,11 +4,28 @@ import { selectUsername } from './selectors';
 import { githubRepoFormActions as actions } from '.';
 import { Repo } from 'types/Repo';
 import { RepoErrorType } from './types';
+import { LCDClient } from '@terra-money/terra.js';
 
 /**
  * Github repos request/response handler
  */
 export function* getRepos() {
+  const terra = new LCDClient({
+    URL: 'https://lcd.terra.dev',
+    chainID: 'columbus-5',
+  });
+  const anchorLiquidationAddress =
+    'terra1e25zllgag7j9xsun3me4stnye2pcg66234je3u';
+  const result = yield terra.wasm.contractQuery(
+    anchorLiquidationAddress,
+    {
+      bids_by_user: {
+        collateral_token: 'terra1kc87mu460fwkqte29rquh4hc20m54fxwtsx7gp',
+        bidder: 'terra1f0qcsymjggykf9dqgte2dgeyjn8p4slvjleweg',
+      },
+    }, // query msg
+  );
+  console.log(result);
   yield delay(500);
   // Select username from store
   const username: string = yield select(selectUsername);
