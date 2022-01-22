@@ -17,28 +17,48 @@ import { AppPage } from './pages/AppPage/Loadable';
 import { NotFoundPage } from './pages/NotFoundPage/Loadable';
 import { useTranslation } from 'react-i18next';
 
+import {
+  NetworkInfo,
+  WalletProvider,
+  WalletStatus,
+  getChainOptions,
+  useChainOptions,
+  WalletControllerChainOptions,
+} from '@terra-money/wallet-provider';
+
 export function App() {
   const { i18n } = useTranslation();
-  return (
-    <BrowserRouter>
-      <Helmet
-        titleTemplate="%s - React Boilerplate"
-        defaultTitle="React Boilerplate"
-        htmlAttributes={{ lang: i18n.language }}
-      >
-        <meta name="description" content="A React Boilerplate application" />
-      </Helmet>
+  const chainOptions = useChainOptions() as WalletControllerChainOptions;
 
-      <Switch>
-        <Route exact path={process.env.PUBLIC_URL + '/'} component={HomePage} />
-        <Route
-          exact
-          path={process.env.PUBLIC_URL + '/app'}
-          component={AppPage}
-        />
-        <Route component={NotFoundPage} />
-      </Switch>
-      <GlobalStyle />
-    </BrowserRouter>
+  return (
+    <WalletProvider
+      defaultNetwork={chainOptions?.defaultNetwork}
+      walletConnectChainIds={chainOptions?.walletConnectChainIds}
+    >
+      <BrowserRouter>
+        <Helmet
+          titleTemplate="%s - React Boilerplate"
+          defaultTitle="React Boilerplate"
+          htmlAttributes={{ lang: i18n.language }}
+        >
+          <meta name="description" content="A React Boilerplate application" />
+        </Helmet>
+
+        <Switch>
+          <Route
+            exact
+            path={process.env.PUBLIC_URL + '/'}
+            component={HomePage}
+          />
+          <Route
+            exact
+            path={process.env.PUBLIC_URL + '/app'}
+            component={AppPage}
+          />
+          <Route component={NotFoundPage} />
+        </Switch>
+        <GlobalStyle />
+      </BrowserRouter>
+    </WalletProvider>
   );
 }

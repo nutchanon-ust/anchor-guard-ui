@@ -4,13 +4,14 @@ import { Logo } from './Logo';
 import { StyleConstants } from 'styles/StyleConstants';
 import { Nav } from './Nav';
 import { PageWrapper } from '../PageWrapper';
+import { WalletSelector } from '../WalletSelector';
 
 export function NavBar() {
   return (
     <Wrapper>
       <PageWrapper>
         <Logo />
-        <Nav />
+        <WalletSelector />
       </PageWrapper>
     </Wrapper>
   );

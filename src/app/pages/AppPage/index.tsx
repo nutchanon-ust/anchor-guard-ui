@@ -16,6 +16,7 @@ export function AppPage() {
           content="A React Boilerplate application homepage"
         />
       </Helmet>
+      <NavBar />
       <PageWrapper>
         <NewBidForm />
         <MyBids />
