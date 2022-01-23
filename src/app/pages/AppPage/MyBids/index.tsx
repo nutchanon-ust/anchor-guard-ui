@@ -9,8 +9,13 @@ import {
 import { useMyBidsSlice } from './slice';
 import { Table, Button } from 'antd';
 import { useConnectedWallet, useLCDClient } from '@terra-money/wallet-provider';
-import { estimateGasFee, fabricateCancelBid } from 'utils/tx-helper';
+import {
+  estimateGasFee,
+  fabricateActivateBid,
+  fabricateCancelBid,
+} from 'utils/tx-helper';
 import { CreateTxOptions, Fee, LCDClient } from '@terra-money/terra.js';
+import { BLUNA_TESTNET_ADDRESS } from 'app/constants';
 
 const { Column } = Table;
 
@@ -48,10 +53,37 @@ export function MyBids() {
     }
   });
 
+  const handleActivateBid = async bidIdx => {
+    if (!walletAddress || !connectedWallet) return;
+    const msgs = fabricateActivateBid(
+      walletAddress,
+      [bidIdx],
+      BLUNA_TESTNET_ADDRESS,
+    );
+    const { estimatedFeeGas, coinAmount } = await estimateGasFee(
+      connectedWallet.network,
+      walletAddress,
+      msgs,
+      lcd,
+    );
+    const tx: CreateTxOptions = {
+      msgs,
+      fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
+    };
+    try {
+      const result = await connectedWallet.post(tx);
+      console.log(result);
+      dispatch(actions.load());
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const handleCancelBid = async bidIdx => {
     if (!walletAddress || !connectedWallet) return;
     const msgs = fabricateCancelBid(walletAddress, bidIdx);
     const { estimatedFeeGas, coinAmount } = await estimateGasFee(
+      connectedWallet.network,
       walletAddress,
       msgs,
       lcd,
@@ -89,7 +121,12 @@ export function MyBids() {
         render={(text, record: any) => (
           <>
             {record.bidStatus !== 'Active' && (
-              <Action type="primary">Activate</Action>
+              <Action
+                type="primary"
+                onClick={() => handleActivateBid(record.id)}
+              >
+                Activate
+              </Action>
             )}
             <Action danger onClick={() => handleCancelBid(record.id)}>
               Cancel

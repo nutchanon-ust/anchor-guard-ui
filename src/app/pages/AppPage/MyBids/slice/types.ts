@@ -13,6 +13,7 @@ export interface Bid {
   bidRemaining: string;
   bidStatus: string;
   amountFilled: string;
+  waitEnd: number;
 }
 
 /* 

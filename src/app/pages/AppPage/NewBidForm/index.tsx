@@ -14,7 +14,7 @@ import {
   useConnectedWallet,
   useLCDClient,
 } from '@terra-money/wallet-provider';
-import { BLUNA_ADDRESS } from 'app/constants';
+import { BLUNA_ADDRESS, BLUNA_TESTNET_ADDRESS } from 'app/constants';
 import { useCallback, useEffect, useMemo } from 'react';
 import { estimateGasFee, fabricateNewBid } from 'utils/tx-helper';
 import { parseUnits } from 'ethers/lib/utils';
@@ -61,14 +61,16 @@ export function NewBidForm(props: Props) {
     const msgs = fabricateNewBid(
       walletAddress,
       premium,
-      BLUNA_ADDRESS,
+      BLUNA_TESTNET_ADDRESS,
       ustAmount,
     );
     const { estimatedFeeGas, coinAmount } = await estimateGasFee(
+      connectedWallet.network,
       walletAddress,
       msgs,
       lcd,
     );
+    console.log('estimatedFeeGas, coinAmount', estimatedFeeGas, coinAmount);
     const tx: CreateTxOptions = {
       msgs,
       fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),

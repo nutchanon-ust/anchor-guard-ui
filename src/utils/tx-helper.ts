@@ -4,9 +4,11 @@ import {
   LCDClient,
   MsgExecuteContract,
 } from '@terra-money/terra.js';
+import { NetworkInfo } from '@terra-money/wallet-provider';
 import {
   ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS,
-  FALLBACK_GAS_PRICE_COLUMNBUS,
+  ANCHOR_LIQUIDATION_QUEUE_TESTNET_CONTRACT_ADDRESS,
+  DEFAULT_FALLBACK_GAS_PRICE,
 } from 'app/constants';
 
 export interface GasEstimation {
@@ -15,6 +17,7 @@ export interface GasEstimation {
 }
 
 export async function estimateGasFee(
+  network: NetworkInfo,
   walletAddress: string,
   msgs: MsgExecuteContract[],
   lcd: LCDClient,
@@ -22,11 +25,12 @@ export async function estimateGasFee(
   const { auth_info } = await lcd.tx.create([{ address: walletAddress }], {
     msgs,
     feeDenoms: ['uusd'],
-    gasPrices: FALLBACK_GAS_PRICE_COLUMNBUS,
+    gasPrices: DEFAULT_FALLBACK_GAS_PRICE(network),
   });
+  console.log('auth_info', auth_info);
   const estimatedFeeGas = auth_info.fee.amount.toArray().reduce((gas, coin) => {
     //@ts-ignore
-    const price = FALLBACK_GAS_PRICE_COLUMNBUS[coin.denom];
+    const price = DEFAULT_FALLBACK_GAS_PRICE(network)[coin.denom];
     return gas.add(coin.amount.div(price));
   }, new Dec(0));
   return { estimatedFeeGas, coinAmount: auth_info.fee.amount };
@@ -41,7 +45,7 @@ export function fabricateNewBid(
   return [
     new MsgExecuteContract(
       walletAddress,
-      ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS,
+      ANCHOR_LIQUIDATION_QUEUE_TESTNET_CONTRACT_ADDRESS,
       {
         submit_bid: {
           premium_slot: premium,
@@ -60,10 +64,30 @@ export function fabricateCancelBid(
   return [
     new MsgExecuteContract(
       walletAddress,
-      ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS,
+      ANCHOR_LIQUIDATION_QUEUE_TESTNET_CONTRACT_ADDRESS,
       {
         retract_bid: {
           bid_idx: bidIdx,
+        },
+      },
+    ),
+  ];
+}
+
+export function fabricateActivateBid(
+  walletAddress: string,
+  bidIdxs: string[],
+  collateralToken: string,
+): MsgExecuteContract[] {
+  return [
+    new MsgExecuteContract(
+      walletAddress,
+      ANCHOR_LIQUIDATION_QUEUE_TESTNET_CONTRACT_ADDRESS,
+
+      {
+        activate_bids: {
+          bids_idx: bidIdxs,
+          collateral_token: collateralToken,
         },
       },
     ),

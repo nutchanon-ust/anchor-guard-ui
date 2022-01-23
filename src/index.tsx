@@ -30,7 +30,11 @@ import reportWebVitals from 'reportWebVitals';
 
 // Initialize languages
 import './locales/i18n';
-import { getChainOptions, WalletProvider } from '@terra-money/wallet-provider';
+import {
+  getChainOptions,
+  NetworkInfo,
+  WalletProvider,
+} from '@terra-money/wallet-provider';
 
 // Observe loading of Inter (to remove 'Inter', remove the <link> tag in
 // the index.html file and this observer)
@@ -45,8 +49,17 @@ const store = configureAppStore();
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 
 getChainOptions().then(chainOptions => {
+  console.log(chainOptions);
+  const testnet: NetworkInfo = {
+    name: 'testnet',
+    chainID: 'bombay-12',
+    lcd: 'https://bombay-lcd.terra.dev',
+  };
   ReactDOM.render(
-    <WalletProvider {...chainOptions}>
+    <WalletProvider
+      defaultNetwork={testnet}
+      walletConnectChainIds={chainOptions.walletConnectChainIds}
+    >
       <Provider store={store}>
         <ThemeProvider>
           <HelmetProvider>
