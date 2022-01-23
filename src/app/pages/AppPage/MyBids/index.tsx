@@ -18,11 +18,14 @@ import {
 import { CreateTxOptions, Fee, LCDClient } from '@terra-money/terra.js';
 import { Bid } from './slice/types';
 import { selectCollateralToken } from '../NewBidForm/slice/selectors';
+import { useTransactionLoadingModalSlice } from 'app/components/TransactionLoadingModal/slice';
 
 const { Column } = Table;
 
 export function MyBids() {
   const { actions } = useMyBidsSlice();
+  const { actions: transactionLoadingModalActions } =
+    useTransactionLoadingModalSlice();
   const connectedWallet = useConnectedWallet();
   const network = connectedWallet?.network;
   const lcd = useLCDClient();
@@ -75,10 +78,13 @@ export function MyBids() {
     };
     try {
       const signResult = await connectedWallet.sign(tx);
+      dispatch(transactionLoadingModalActions.startLoading());
       await lcd.tx.broadcast(signResult.result);
+      dispatch(transactionLoadingModalActions.stopLoading());
       dispatch(actions.load());
     } catch (e) {
       console.error(e);
+      dispatch(transactionLoadingModalActions.stopLoading());
     }
   };
 
@@ -97,10 +103,13 @@ export function MyBids() {
     };
     try {
       const signResult = await connectedWallet.sign(tx);
+      dispatch(transactionLoadingModalActions.startLoading());
       await lcd.tx.broadcast(signResult.result);
+      dispatch(transactionLoadingModalActions.stopLoading());
       dispatch(actions.load());
     } catch (e) {
       console.error(e);
+      dispatch(transactionLoadingModalActions.stopLoading());
     }
   };
 
@@ -118,11 +127,14 @@ export function MyBids() {
       fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
     };
     try {
-      const result = await connectedWallet.post(tx);
-      console.log(result);
+      const signResult = await connectedWallet.sign(tx);
+      dispatch(transactionLoadingModalActions.startLoading());
+      await lcd.tx.broadcast(signResult.result);
+      dispatch(transactionLoadingModalActions.stopLoading());
       dispatch(actions.load());
     } catch (e) {
       console.error(e);
+      dispatch(transactionLoadingModalActions.stopLoading());
     }
   };
 

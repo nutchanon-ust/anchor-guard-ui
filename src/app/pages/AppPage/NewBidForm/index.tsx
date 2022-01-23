@@ -8,24 +8,21 @@ import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { messages } from './messages';
 import { Form, Button, InputNumber, Select } from 'antd';
-import { CreateTxOptions, Fee, LCDClient } from '@terra-money/terra.js';
+import { CreateTxOptions, Fee } from '@terra-money/terra.js';
 import {
   ConnectedWallet,
   useConnectedWallet,
   useLCDClient,
 } from '@terra-money/wallet-provider';
-import {
-  BETH_ADDRESS,
-  BLUNA_ADDRESS,
-  BLUNA_TESTNET_ADDRESS,
-} from 'app/constants';
-import { useCallback, useEffect, useMemo } from 'react';
+import { BETH_ADDRESS, BLUNA_ADDRESS } from 'app/constants';
+import { useCallback, useEffect } from 'react';
 import { estimateGasFee, fabricateNewBid } from 'utils/tx-helper';
 import { parseUnits } from 'ethers/lib/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNewBidSlice } from './slice';
 import { selectCollateralToken, selectUserUstBalance } from './slice/selectors';
 import { useMyBidsSlice } from '../MyBids/slice';
+import { useTransactionLoadingModalSlice } from 'app/components/TransactionLoadingModal/slice';
 
 interface Props {}
 
@@ -42,6 +39,9 @@ export function NewBidForm(props: Props) {
   const dispatch = useDispatch();
   const { actions } = useNewBidSlice();
   const { actions: myBidsActions } = useMyBidsSlice();
+  const { actions: transactionLoadingModalActions } =
+    useTransactionLoadingModalSlice();
+
   const fetchBalance = useCallback(async () => {
     if (!lcd) return;
     const [coins, pagination] = await lcd.bank.balance(
@@ -89,10 +89,13 @@ export function NewBidForm(props: Props) {
     };
     try {
       const signResult = await connectedWallet.sign(tx);
+      dispatch(transactionLoadingModalActions.startLoading());
       await lcd.tx.broadcast(signResult.result);
+      dispatch(transactionLoadingModalActions.stopLoading());
       dispatch(myBidsActions.load());
     } catch (e) {
       console.error(e);
+      dispatch(transactionLoadingModalActions.stopLoading());
     }
   };
 

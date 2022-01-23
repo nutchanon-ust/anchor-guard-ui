@@ -5,6 +5,7 @@ import { PageWrapper } from 'app/components/PageWrapper';
 import { Row, Col } from 'antd';
 import { MyBids } from './MyBids';
 import { NewBidForm } from './NewBidForm';
+import { TransactionLoadingModal } from 'app/components/TransactionLoadingModal';
 
 export function AppPage() {
   return (
@@ -20,6 +21,7 @@ export function AppPage() {
       <PageWrapper>
         <NewBidForm />
         <MyBids />
+        <TransactionLoadingModal />
       </PageWrapper>
     </>
   );
