@@ -64,8 +64,14 @@ export function MyBids() {
   }, [collateralToken]);
 
   const handleActivateBid = async bidIdx => {
-    if (!walletAddress || !connectedWallet || !collateralToken) return;
-    const msgs = fabricateActivateBid(walletAddress, [bidIdx], collateralToken);
+    if (!walletAddress || !connectedWallet || !collateralToken || !network)
+      return;
+    const msgs = fabricateActivateBid(
+      network,
+      walletAddress,
+      [bidIdx],
+      collateralToken,
+    );
     const { estimatedFeeGas, coinAmount } = await estimateGasFee(
       connectedWallet.network,
       walletAddress,
@@ -89,8 +95,8 @@ export function MyBids() {
   };
 
   const handleCancelBid = async bidIdx => {
-    if (!walletAddress || !connectedWallet) return;
-    const msgs = fabricateCancelBid(walletAddress, bidIdx);
+    if (!walletAddress || !connectedWallet || !network) return;
+    const msgs = fabricateCancelBid(network, walletAddress, bidIdx);
     const { estimatedFeeGas, coinAmount } = await estimateGasFee(
       connectedWallet.network,
       walletAddress,
@@ -114,8 +120,14 @@ export function MyBids() {
   };
 
   const handleClaimBid = async bidIdx => {
-    if (!walletAddress || !connectedWallet || !collateralToken) return;
-    const msgs = fabricateClaimBid(walletAddress, [bidIdx], collateralToken);
+    if (!walletAddress || !connectedWallet || !collateralToken || !network)
+      return;
+    const msgs = fabricateClaimBid(
+      network,
+      walletAddress,
+      [bidIdx],
+      collateralToken,
+    );
     const { estimatedFeeGas, coinAmount } = await estimateGasFee(
       connectedWallet.network,
       walletAddress,
@@ -147,78 +159,83 @@ export function MyBids() {
   });
 
   return (
-    <Table dataSource={myBids} rowKey={bid => bid.id}>
-      <Column
-        title="Premium"
-        dataIndex="premium"
-        key="premium"
-        render={text => `${text}%`}
-        sortDirections={['ascend', 'descend']}
-        sorter={(a: Bid, b: Bid) => {
-          return a.premium - b.premium;
-        }}
-        defaultSortOrder={'ascend'}
-      />
-      <Column
-        title="Bid Remaining"
-        dataIndex="bidRemaining"
-        key="bidRemaining"
-        sortDirections={['ascend', 'descend']}
-        sorter={(a: Bid, b: Bid) => {
-          return a.bidRemaining - b.bidRemaining;
-        }}
-      />
-      <Column
-        title="Bid Status"
-        dataIndex="bidStatus"
-        key="bidStatus"
-        sorter={(a: Bid, b: Bid) => {
-          return a.bidStatus > b.bidStatus ? 1 : -1;
-        }}
-      />
-      <Column
-        title="Amount Filled"
-        dataIndex="amountFilled"
-        key="amountFilled"
-        sorter={(a: Bid, b: Bid) => {
-          return a.amountFilled - b.amountFilled;
-        }}
-      />
-      <Column
-        title="Action"
-        key="action"
-        width={50}
-        render={(text, record: any) => (
-          <Row>
-            {record.bidStatus !== 'Active' && (
-              <Col span={24}>
-                <Action
-                  type="primary"
-                  loading={record.timeLeft > 0}
-                  onClick={() => handleActivateBid(record.id)}
-                >
-                  {record.timeLeft > 0
-                    ? `Activate in ${record.timeLeft}s`
-                    : `Activate`}
-                </Action>
-              </Col>
-            )}
-            {record.amountFilled > 0 && (
-              <Col span={24}>
-                <Action onClick={() => handleClaimBid(record.id)}>Claim</Action>
-              </Col>
-            )}
-            {record.amountFilled == 0 && (
-              <Col span={24}>
-                <Action danger onClick={() => handleCancelBid(record.id)}>
-                  Cancel
-                </Action>
-              </Col>
-            )}
-          </Row>
-        )}
-      />
-    </Table>
+    <>
+      <h1>My Bids</h1>
+      <Table dataSource={myBids} rowKey={bid => bid.id}>
+        <Column
+          title="Premium"
+          dataIndex="premium"
+          key="premium"
+          render={text => `${text}%`}
+          sortDirections={['ascend', 'descend']}
+          sorter={(a: Bid, b: Bid) => {
+            return a.premium - b.premium;
+          }}
+          defaultSortOrder={'ascend'}
+        />
+        <Column
+          title="Bid Remaining"
+          dataIndex="bidRemaining"
+          key="bidRemaining"
+          sortDirections={['ascend', 'descend']}
+          sorter={(a: Bid, b: Bid) => {
+            return a.bidRemaining - b.bidRemaining;
+          }}
+        />
+        <Column
+          title="Bid Status"
+          dataIndex="bidStatus"
+          key="bidStatus"
+          sorter={(a: Bid, b: Bid) => {
+            return a.bidStatus > b.bidStatus ? 1 : -1;
+          }}
+        />
+        <Column
+          title="Amount Filled"
+          dataIndex="amountFilled"
+          key="amountFilled"
+          sorter={(a: Bid, b: Bid) => {
+            return a.amountFilled - b.amountFilled;
+          }}
+        />
+        <Column
+          title="Action"
+          key="action"
+          width={50}
+          render={(text, record: any) => (
+            <Row>
+              {record.bidStatus !== 'Active' && (
+                <Col span={24}>
+                  <Action
+                    type="primary"
+                    loading={record.timeLeft > 0}
+                    onClick={() => handleActivateBid(record.id)}
+                  >
+                    {record.timeLeft > 0
+                      ? `Activate in ${record.timeLeft}s`
+                      : `Activate`}
+                  </Action>
+                </Col>
+              )}
+              {record.amountFilled > 0 && (
+                <Col span={24}>
+                  <Action onClick={() => handleClaimBid(record.id)}>
+                    Claim
+                  </Action>
+                </Col>
+              )}
+              {record.amountFilled == 0 && (
+                <Col span={24}>
+                  <Action danger onClick={() => handleCancelBid(record.id)}>
+                    Cancel
+                  </Action>
+                </Col>
+              )}
+            </Row>
+          )}
+        />
+      </Table>
+    </>
   );
 }
 

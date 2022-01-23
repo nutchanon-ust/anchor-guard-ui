@@ -1,6 +1,6 @@
 import { NetworkInfo } from '@terra-money/wallet-provider';
 
-export const ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS =
+export const ANCHOR_LIQUIDATION_QUEUE_MAINNET_CONTRACT_ADDRESS =
   'terra1e25zllgag7j9xsun3me4stnye2pcg66234je3u';
 export const ANCHOR_LIQUIDATION_QUEUE_TESTNET_CONTRACT_ADDRESS =
   'terra18j0wd0f62afcugw2rx5y8e6j5qjxd7d6qsc87r';
@@ -88,5 +88,15 @@ export function BETH_ADDRESS(network: NetworkInfo) {
     return BETH_TESTNET_ADDRESS;
   } else {
     return BETH_MAINNET_ADDRESS;
+  }
+}
+
+export function ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS(
+  network: NetworkInfo,
+) {
+  if (network?.chainID.startsWith('bombay')) {
+    return ANCHOR_LIQUIDATION_QUEUE_TESTNET_CONTRACT_ADDRESS;
+  } else {
+    return ANCHOR_LIQUIDATION_QUEUE_MAINNET_CONTRACT_ADDRESS;
   }
 }

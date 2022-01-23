@@ -1,2 +1,6 @@
 /* --- STATE --- */
-export interface WalletConnectionState {}
+export interface WalletConnectionState {
+  network: string;
+  lcdUrl: string;
+  lcdChainId: string;
+}

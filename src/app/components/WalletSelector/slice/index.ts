@@ -1,16 +1,36 @@
 import { PayloadAction } from '@reduxjs/toolkit';
+import { NetworkInfo } from '@terra-money/wallet-provider';
+import { MAINNET_CHAIN_ID, MAINNET_LCD_URL } from 'app/constants';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
 import { walletConnectionSaga } from './saga';
 import { WalletConnectionState } from './types';
 
-export const initialState: WalletConnectionState = {};
+const mainnet: NetworkInfo = {
+  name: 'mainnet',
+  chainID: 'columbus-5',
+  lcd: 'https://lcd.terra.dev',
+};
+
+export const initialState: WalletConnectionState = {
+  network: JSON.stringify(mainnet),
+  lcdUrl: MAINNET_LCD_URL,
+  lcdChainId: MAINNET_CHAIN_ID,
+};
 
 const slice = createSlice({
   name: 'walletConnection',
   initialState,
   reducers: {
-    someAction(state, action: PayloadAction<any>) {},
+    setNetwork(state, action: PayloadAction<string>) {
+      state.network = action.payload;
+    },
+    setLCDUrl(state, action: PayloadAction<string>) {
+      state.lcdUrl = action.payload;
+    },
+    setLCDChainID(state, action: PayloadAction<string>) {
+      state.lcdChainId = action.payload;
+    },
   },
 });
 

@@ -8,7 +8,6 @@ import {
 import { NetworkInfo } from '@terra-money/wallet-provider';
 import {
   ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS,
-  ANCHOR_LIQUIDATION_QUEUE_TESTNET_CONTRACT_ADDRESS,
   DEFAULT_FALLBACK_GAS_PRICE,
 } from 'app/constants';
 
@@ -39,6 +38,7 @@ export async function estimateGasFee(
 }
 
 export function fabricateNewBid(
+  network: NetworkInfo,
   walletAddress: string,
   premium: number,
   collateralToken: string,
@@ -47,7 +47,7 @@ export function fabricateNewBid(
   return [
     new MsgExecuteContract(
       walletAddress,
-      ANCHOR_LIQUIDATION_QUEUE_TESTNET_CONTRACT_ADDRESS,
+      ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS(network),
       {
         submit_bid: {
           premium_slot: premium,
@@ -60,13 +60,14 @@ export function fabricateNewBid(
 }
 
 export function fabricateCancelBid(
+  network: NetworkInfo,
   walletAddress: string,
   bidIdx: string,
 ): MsgExecuteContract[] {
   return [
     new MsgExecuteContract(
       walletAddress,
-      ANCHOR_LIQUIDATION_QUEUE_TESTNET_CONTRACT_ADDRESS,
+      ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS(network),
       {
         retract_bid: {
           bid_idx: bidIdx,
@@ -77,6 +78,7 @@ export function fabricateCancelBid(
 }
 
 export function fabricateClaimBid(
+  network: NetworkInfo,
   walletAddress: string,
   bidIdxs: string[],
   collateralToken: string,
@@ -84,7 +86,7 @@ export function fabricateClaimBid(
   return [
     new MsgExecuteContract(
       walletAddress,
-      ANCHOR_LIQUIDATION_QUEUE_TESTNET_CONTRACT_ADDRESS,
+      ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS(network),
       {
         claim_liquidations: {
           bids_idx: bidIdxs,
@@ -96,6 +98,7 @@ export function fabricateClaimBid(
 }
 
 export function fabricateActivateBid(
+  network: NetworkInfo,
   walletAddress: string,
   bidIdxs: string[],
   collateralToken: string,
@@ -103,7 +106,7 @@ export function fabricateActivateBid(
   return [
     new MsgExecuteContract(
       walletAddress,
-      ANCHOR_LIQUIDATION_QUEUE_TESTNET_CONTRACT_ADDRESS,
+      ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS(network),
 
       {
         activate_bids: {

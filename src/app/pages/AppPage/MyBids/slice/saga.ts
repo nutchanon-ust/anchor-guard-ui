@@ -2,28 +2,23 @@ import { call, put, select, takeLatest, delay } from 'redux-saga/effects';
 import { myBidsActions as actions } from '.';
 import { LCDClient } from '@terra-money/terra.js';
 import { formatUnits } from 'ethers/lib/utils';
-import {
-  ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS,
-  ANCHOR_LIQUIDATION_QUEUE_TESTNET_CONTRACT_ADDRESS,
-  BLUNA_TESTNET_ADDRESS,
-  TESTNET_CHAIN_ID,
-  TESTNET_LCD_URL,
-} from 'app/constants';
+import { ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS } from 'app/constants';
 import { selectWalletAddress } from './selectors';
 import { selectCollateralToken } from '../../NewBidForm/slice/selectors';
+import { NetworkInfo } from '@terra-money/wallet-provider';
+import {
+  selectLCDClient,
+  selectNetwork,
+} from 'app/components/WalletSelector/slice/selectors';
 
 export function* getMyBids() {
-  console.log('terra');
-  const terra = new LCDClient({
-    URL: TESTNET_LCD_URL,
-    chainID: TESTNET_CHAIN_ID,
-  });
-
+  const lcd: LCDClient = yield select(selectLCDClient);
   const walletAddress: string = yield select(selectWalletAddress);
   const collateralToken: string = yield select(selectCollateralToken);
+  const network: NetworkInfo = yield select(selectNetwork);
   if (walletAddress) {
-    const result = yield terra.wasm.contractQuery(
-      ANCHOR_LIQUIDATION_QUEUE_TESTNET_CONTRACT_ADDRESS,
+    const result = yield lcd.wasm.contractQuery(
+      ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS(network),
       {
         bids_by_user: {
           collateral_token: collateralToken,

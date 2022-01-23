@@ -71,6 +71,7 @@ export function NewBidForm(props: Props) {
       6,
     ).toNumber();
     const msgs = fabricateNewBid(
+      network,
       walletAddress,
       premium,
       collateralToken,
@@ -107,60 +108,63 @@ export function NewBidForm(props: Props) {
 
   const userUstBalance = useSelector(selectUserUstBalance);
   return (
-    <Form
-      form={form}
-      name="basic"
-      labelCol={{ span: 4 }}
-      initialValues={{
-        premium: 1,
-        bidAmount: 0,
-        collateralToken: BLUNA_ADDRESS(network),
-      }}
-      autoComplete="off"
-      onValuesChange={handleValuesChange}
-    >
-      <Form.Item label="Collateral Asset" name="collateralToken">
-        <Select>
-          <Select.Option value={BLUNA_ADDRESS(network)}>bLUNA</Select.Option>
-          <Select.Option value={BETH_ADDRESS(network)}>bETH</Select.Option>
-        </Select>
-      </Form.Item>
-      <Form.Item
-        label="Premium"
-        name="premium"
-        rules={[
-          { required: true, message: 'Please specify Premium for your bid.' },
-        ]}
+    <>
+      <h1>New Bid</h1>
+      <Form
+        form={form}
+        name="basic"
+        labelCol={{ span: 4 }}
+        initialValues={{
+          premium: 1,
+          bidAmount: 0,
+          collateralToken: BLUNA_ADDRESS(network),
+        }}
+        autoComplete="off"
+        onValuesChange={handleValuesChange}
       >
-        <InputNumber
-          addonAfter="%"
-          min={0}
-          max={30}
-          autoComplete="off"
-          style={{ width: '100%' }}
-        />
-      </Form.Item>
+        <Form.Item label="Collateral Asset" name="collateralToken">
+          <Select>
+            <Select.Option value={BLUNA_ADDRESS(network)}>bLUNA</Select.Option>
+            <Select.Option value={BETH_ADDRESS(network)}>bETH</Select.Option>
+          </Select>
+        </Form.Item>
+        <Form.Item
+          label="Premium"
+          name="premium"
+          rules={[
+            { required: true, message: 'Please specify Premium for your bid.' },
+          ]}
+        >
+          <InputNumber
+            addonAfter="%"
+            min={0}
+            max={30}
+            autoComplete="off"
+            style={{ width: '100%' }}
+          />
+        </Form.Item>
 
-      <Form.Item
-        label="Bid Amount"
-        name="bidAmount"
-        rules={[{ required: true, message: 'Please input your Bid Amount.' }]}
-      >
-        <InputNumber
-          addonAfter="UST"
-          min={0.000001}
-          max={userUstBalance}
-          style={{ width: '100%' }}
-          autoComplete="off"
-        />
-      </Form.Item>
+        <Form.Item
+          label="Bid Amount"
+          name="bidAmount"
+          rules={[{ required: true, message: 'Please input your Bid Amount.' }]}
+        >
+          <InputNumber
+            addonAfter="UST"
+            min={0.000001}
+            max={userUstBalance}
+            style={{ width: '100%' }}
+            autoComplete="off"
+          />
+        </Form.Item>
 
-      <Form.Item style={{ textAlign: 'right' }}>
-        <Button type="primary" onClick={postTx}>
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
+        <Form.Item style={{ textAlign: 'right' }}>
+          <Button type="primary" onClick={postTx}>
+            Place New Bid
+          </Button>
+        </Form.Item>
+      </Form>
+    </>
   );
 }
 

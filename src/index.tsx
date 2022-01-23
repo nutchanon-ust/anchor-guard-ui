@@ -49,17 +49,8 @@ const store = configureAppStore();
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 
 getChainOptions().then(chainOptions => {
-  console.log(chainOptions);
-  const testnet: NetworkInfo = {
-    name: 'testnet',
-    chainID: 'bombay-12',
-    lcd: 'https://bombay-lcd.terra.dev',
-  };
   ReactDOM.render(
-    <WalletProvider
-      defaultNetwork={testnet}
-      walletConnectChainIds={chainOptions.walletConnectChainIds}
-    >
+    <WalletProvider {...chainOptions}>
       <Provider store={store}>
         <ThemeProvider>
           <HelmetProvider>

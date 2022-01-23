@@ -11,10 +11,13 @@ import { Button, Modal } from 'antd';
 import { WalletOutlined } from '@ant-design/icons';
 import {
   ConnectType,
+  useLCDClient,
   useWallet,
   WalletStatus,
 } from '@terra-money/wallet-provider';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useWalletConnectionSlice } from './slice';
 
 interface Props {}
 
@@ -34,6 +37,7 @@ export function WalletSelector(props: Props) {
     availableInstallations,
     supportFeatures,
   } = useWallet();
+  const lcd = useLCDClient();
 
   const [isConnectWalletModalVisible, setIsConnectWalletModalVisible] =
     useState(false);
@@ -57,7 +61,18 @@ export function WalletSelector(props: Props) {
     setIsWalletInfoModalVisible(false);
   };
 
-  console.log('availableConnections', availableConnections);
+  const dispatch = useDispatch();
+  const { actions } = useWalletConnectionSlice();
+
+  useEffect(() => {
+    dispatch(actions.setNetwork(JSON.stringify(network)));
+  });
+
+  useEffect(() => {
+    dispatch(actions.setLCDUrl(lcd.config.URL));
+    dispatch(actions.setLCDChainID(lcd.config.chainID));
+  });
+
   switch (status) {
     case WalletStatus.INITIALIZING:
       return <div>Initializing</div>;
