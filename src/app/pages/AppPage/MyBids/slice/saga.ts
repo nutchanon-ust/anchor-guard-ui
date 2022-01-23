@@ -10,6 +10,7 @@ import {
   TESTNET_LCD_URL,
 } from 'app/constants';
 import { selectWalletAddress } from './selectors';
+import { selectCollateralToken } from '../../NewBidForm/slice/selectors';
 
 export function* getMyBids() {
   console.log('terra');
@@ -19,12 +20,13 @@ export function* getMyBids() {
   });
 
   const walletAddress: string = yield select(selectWalletAddress);
+  const collateralToken: string = yield select(selectCollateralToken);
   if (walletAddress) {
     const result = yield terra.wasm.contractQuery(
       ANCHOR_LIQUIDATION_QUEUE_TESTNET_CONTRACT_ADDRESS,
       {
         bids_by_user: {
-          collateral_token: BLUNA_TESTNET_ADDRESS,
+          collateral_token: collateralToken,
           bidder: walletAddress,
         },
       }, // query msg

@@ -16,8 +16,8 @@ import {
   fabricateClaimBid,
 } from 'utils/tx-helper';
 import { CreateTxOptions, Fee, LCDClient } from '@terra-money/terra.js';
-import { BLUNA_TESTNET_ADDRESS } from 'app/constants';
 import { Bid } from './slice/types';
+import { selectCollateralToken } from '../NewBidForm/slice/selectors';
 
 const { Column } = Table;
 
@@ -30,6 +30,7 @@ export function MyBids() {
   const myBids = useSelector(selectMyBids);
   const isLoading = useSelector(selectLoading);
   const walletAddress = useSelector(selectWalletAddress);
+  const collateralToken = useSelector(selectCollateralToken);
 
   const dispatch = useDispatch();
 
@@ -55,13 +56,13 @@ export function MyBids() {
     }
   });
 
+  useEffect(() => {
+    dispatch(actions.load());
+  }, [collateralToken]);
+
   const handleActivateBid = async bidIdx => {
-    if (!walletAddress || !connectedWallet) return;
-    const msgs = fabricateActivateBid(
-      walletAddress,
-      [bidIdx],
-      BLUNA_TESTNET_ADDRESS,
-    );
+    if (!walletAddress || !connectedWallet || !collateralToken) return;
+    const msgs = fabricateActivateBid(walletAddress, [bidIdx], collateralToken);
     const { estimatedFeeGas, coinAmount } = await estimateGasFee(
       connectedWallet.network,
       walletAddress,
@@ -73,8 +74,8 @@ export function MyBids() {
       fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
     };
     try {
-      const result = await connectedWallet.post(tx);
-      console.log(result);
+      const signResult = await connectedWallet.sign(tx);
+      await lcd.tx.broadcast(signResult.result);
       dispatch(actions.load());
     } catch (e) {
       console.error(e);
@@ -95,8 +96,8 @@ export function MyBids() {
       fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
     };
     try {
-      const result = await connectedWallet.post(tx);
-      console.log(result);
+      const signResult = await connectedWallet.sign(tx);
+      await lcd.tx.broadcast(signResult.result);
       dispatch(actions.load());
     } catch (e) {
       console.error(e);
@@ -104,12 +105,8 @@ export function MyBids() {
   };
 
   const handleClaimBid = async bidIdx => {
-    if (!walletAddress || !connectedWallet) return;
-    const msgs = fabricateClaimBid(
-      walletAddress,
-      [bidIdx],
-      BLUNA_TESTNET_ADDRESS,
-    );
+    if (!walletAddress || !connectedWallet || !collateralToken) return;
+    const msgs = fabricateClaimBid(walletAddress, [bidIdx], collateralToken);
     const { estimatedFeeGas, coinAmount } = await estimateGasFee(
       connectedWallet.network,
       walletAddress,

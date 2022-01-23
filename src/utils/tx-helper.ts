@@ -3,6 +3,7 @@ import {
   Dec,
   LCDClient,
   MsgExecuteContract,
+  Tx,
 } from '@terra-money/terra.js';
 import { NetworkInfo } from '@terra-money/wallet-provider';
 import {
@@ -22,18 +23,19 @@ export async function estimateGasFee(
   msgs: MsgExecuteContract[],
   lcd: LCDClient,
 ): Promise<GasEstimation> {
-  const { auth_info } = await lcd.tx.create([{ address: walletAddress }], {
+  const tx = await lcd.tx.create([{ address: walletAddress }], {
     msgs,
     feeDenoms: ['uusd'],
     gasPrices: DEFAULT_FALLBACK_GAS_PRICE(network),
   });
-  console.log('auth_info', auth_info);
-  const estimatedFeeGas = auth_info.fee.amount.toArray().reduce((gas, coin) => {
-    //@ts-ignore
-    const price = DEFAULT_FALLBACK_GAS_PRICE(network)[coin.denom];
-    return gas.add(coin.amount.div(price));
-  }, new Dec(0));
-  return { estimatedFeeGas, coinAmount: auth_info.fee.amount };
+  const estimatedFeeGas = tx.auth_info.fee.amount
+    .toArray()
+    .reduce((gas, coin) => {
+      //@ts-ignore
+      const price = DEFAULT_FALLBACK_GAS_PRICE(network)[coin.denom];
+      return gas.add(coin.amount.div(price));
+    }, new Dec(0));
+  return { estimatedFeeGas, coinAmount: tx.auth_info.fee.amount };
 }
 
 export function fabricateNewBid(

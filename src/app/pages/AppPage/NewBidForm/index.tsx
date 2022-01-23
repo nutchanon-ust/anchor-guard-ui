@@ -25,6 +25,7 @@ import { parseUnits } from 'ethers/lib/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNewBidSlice } from './slice';
 import { selectCollateralToken, selectUserUstBalance } from './slice/selectors';
+import { useMyBidsSlice } from '../MyBids/slice';
 
 interface Props {}
 
@@ -40,6 +41,7 @@ export function NewBidForm(props: Props) {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const { actions } = useNewBidSlice();
+  const { actions: myBidsActions } = useMyBidsSlice();
   const fetchBalance = useCallback(async () => {
     if (!lcd) return;
     const [coins, pagination] = await lcd.bank.balance(
@@ -86,8 +88,9 @@ export function NewBidForm(props: Props) {
       fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
     };
     try {
-      const result = await connectedWallet.post(tx);
-      console.log(result);
+      const signResult = await connectedWallet.sign(tx);
+      await lcd.tx.broadcast(signResult.result);
+      dispatch(myBidsActions.load());
     } catch (e) {
       console.error(e);
     }
