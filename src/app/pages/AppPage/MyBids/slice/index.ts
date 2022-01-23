@@ -26,6 +26,13 @@ const slice = createSlice({
     changeWalletAddress(state, action: PayloadAction<string | null>) {
       state.walletAddress = action.payload;
     },
+    updateTimeLeft(state) {
+      state.myBids.slice().map(each => {
+        const now = Math.floor(Date.now() / 1000);
+        each.timeLeft =
+          each.waitEnd && each.waitEnd > now ? each.waitEnd - now : 0;
+      });
+    },
   },
 });
 

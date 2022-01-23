@@ -101,6 +101,14 @@ export function MyBids() {
     }
   };
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      dispatch(actions.updateTimeLeft());
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  });
+
   return (
     <Table dataSource={myBids} rowKey={bid => bid.id}>
       <Column title="Premium" dataIndex="premium" key="premium" />
@@ -123,9 +131,12 @@ export function MyBids() {
             {record.bidStatus !== 'Active' && (
               <Action
                 type="primary"
+                loading={record.timeLeft > 0}
                 onClick={() => handleActivateBid(record.id)}
               >
-                Activate
+                {record.timeLeft > 0
+                  ? `Activate in ${record.timeLeft}s`
+                  : `Activate`}
               </Action>
             )}
             <Action danger onClick={() => handleCancelBid(record.id)}>

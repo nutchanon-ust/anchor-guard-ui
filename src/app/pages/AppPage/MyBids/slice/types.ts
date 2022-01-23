@@ -14,6 +14,7 @@ export interface Bid {
   bidStatus: string;
   amountFilled: string;
   waitEnd: number;
+  timeLeft: number;
 }
 
 /* 
