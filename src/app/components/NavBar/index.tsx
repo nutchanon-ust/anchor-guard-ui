@@ -5,14 +5,19 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { Nav } from './Nav';
 import { PageWrapper } from '../PageWrapper';
 import { WalletSelector } from '../WalletSelector';
+import { Row, Col } from 'antd';
 
 export function NavBar() {
   return (
     <Wrapper>
-      <PageWrapper>
-        <Logo />
-        <WalletSelector />
-      </PageWrapper>
+      <Row>
+        <Col span={16}>
+          <Logo />
+        </Col>
+        <Col span={8} style={{ textAlign: 'right' }}>
+          <WalletSelector />
+        </Col>
+      </Row>
     </Wrapper>
   );
 }
@@ -20,8 +25,9 @@ export function NavBar() {
 const Wrapper = styled.header`
   box-shadow: 0 1px 0 0 ${p => p.theme.borderLight};
   height: ${StyleConstants.NAV_BAR_HEIGHT};
-  display: flex;
+  display: block;
   position: fixed;
+  padding: 15px;
   top: 0;
   width: 100%;
   background-color: ${p => p.theme.background};
@@ -34,11 +40,5 @@ const Wrapper = styled.header`
         /rgba?(\(\s*\d+\s*,\s*\d+\s*,\s*\d+)(?:\s*,.+?)?\)/,
         'rgba$1,0.75)',
       )};
-  }
-
-  ${PageWrapper} {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
   }
 `;

@@ -12,7 +12,7 @@ export function Logo() {
         />
       </div>
       <Title>Anchor Guard</Title>
-      <Description>Free-for-all Anchor Liquidation Queue UI</Description>
+      <Description>Anchor Liquidation Queue UI</Description>
     </Wrapper>
   );
 }
