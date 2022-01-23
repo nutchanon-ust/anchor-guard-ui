@@ -15,7 +15,7 @@ export function AppPage() {
   return (
     <>
       <Alert
-        message="Anchor Guard or any website will never ask for your seed phrase/mnemonic keys. Do not ever give them to any one."
+        message="Anchor Guard or any website will never ask for your seed phrase/mnemonic keys. Do not ever give them to anyone."
         type="warning"
         showIcon
         closable
@@ -39,26 +39,36 @@ export function AppPage() {
         <MyBids />
         <TransactionLoadingModal />
         <Footer style={{ textAlign: 'center' }}>
-          Created by nutchanon.ust |{' '}
-          <a
-            href="https://finder.terra.money/mainnet/address/terra18w0466472xxwkwe4dvketx345h4c7eg5ypcmza"
-            target={'_blank'}
-            rel="noreferrer"
-          >
-            Donate
-          </a>{' '}
-          |{' '}
-          <a
-            href="https://github.com/nutchanon-ust/anchor-guard-ui"
-            target={'_blank'}
-            rel="noreferrer"
-          >
-            GitHub
-          </a>
-          | Logo taken from{' '}
-          <a href="https://astroport.fi/" target={'_blank'} rel="noreferrer">
-            Astroport
-          </a>
+          <div>
+            Created by nutchanon.ust |{' '}
+            <a
+              href="https://finder.terra.money/mainnet/address/terra18w0466472xxwkwe4dvketx345h4c7eg5ypcmza"
+              target={'_blank'}
+              rel="noreferrer"
+            >
+              Donate
+            </a>{' '}
+            |{' '}
+            <a
+              href="https://github.com/nutchanon-ust/anchor-guard-ui"
+              target={'_blank'}
+              rel="noreferrer"
+            >
+              GitHub
+            </a>
+            | Logo taken from{' '}
+            <a href="https://astroport.fi/" target={'_blank'} rel="noreferrer">
+              Astroport
+            </a>
+          </div>
+          <div>
+            DISCLAIMER: Anchor Guard interacts directly with Anchor Protocol
+            Smart Contract without any intermidiaries.
+          </div>
+          <div>
+            Use Anchor Guard at you own risk. The contributors of Anchor Guard
+            are not responsible for any loss of funds.
+          </div>
         </Footer>
       </PageWrapper>
     </>
