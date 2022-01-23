@@ -8,7 +8,11 @@ import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { messages } from './messages';
 import { Form, Button, InputNumber, Select, Typography } from 'antd';
-import { CreateTxOptions, Fee } from '@terra-money/terra.js';
+import {
+  BlockTxBroadcastResult,
+  CreateTxOptions,
+  Fee,
+} from '@terra-money/terra.js';
 import {
   ConnectedWallet,
   useConnectedWallet,
@@ -64,7 +68,6 @@ export function NewBidForm(props: Props) {
   }, [network]);
 
   const postTx = async () => {
-    console.log('collateralToken', collateralToken);
     if (!connectedWallet || !lcd || !collateralToken) return;
     await form.validateFields();
     const premium = Number(form.getFieldValue('premium'));
@@ -85,7 +88,6 @@ export function NewBidForm(props: Props) {
       msgs,
       lcd,
     );
-    console.log('estimatedFeeGas, coinAmount', estimatedFeeGas, coinAmount);
     const tx: CreateTxOptions = {
       msgs,
       fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
@@ -93,11 +95,19 @@ export function NewBidForm(props: Props) {
     try {
       const signResult = await connectedWallet.sign(tx);
       dispatch(transactionLoadingModalActions.startLoading());
-      await lcd.tx.broadcast(signResult.result);
+      const broadCastResult = await lcd.tx.broadcast(signResult.result);
+      console.log(broadCastResult);
+      if (broadCastResult.raw_log.includes('fail')) {
+        dispatch(
+          transactionLoadingModalActions.setError(broadCastResult.raw_log),
+        );
+      } else {
+        dispatch(myBidsActions.load());
+      }
       dispatch(transactionLoadingModalActions.stopLoading());
-      dispatch(myBidsActions.load());
     } catch (e) {
       console.error(e);
+      dispatch(transactionLoadingModalActions.setError('error'));
       dispatch(transactionLoadingModalActions.stopLoading());
     }
   };
@@ -109,6 +119,7 @@ export function NewBidForm(props: Props) {
   };
 
   const userUstBalance = useSelector(selectUserUstBalance);
+  console.log('userUstBalance', userUstBalance);
   return (
     <>
       <Title level={2}>New Bid</Title>

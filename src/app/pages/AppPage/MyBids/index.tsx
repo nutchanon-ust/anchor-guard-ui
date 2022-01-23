@@ -86,11 +86,19 @@ export function MyBids() {
     try {
       const signResult = await connectedWallet.sign(tx);
       dispatch(transactionLoadingModalActions.startLoading());
-      await lcd.tx.broadcast(signResult.result);
+      const broadCastResult = await lcd.tx.broadcast(signResult.result);
+      console.log(broadCastResult);
+      if (broadCastResult.raw_log.includes('fail')) {
+        dispatch(
+          transactionLoadingModalActions.setError(broadCastResult.raw_log),
+        );
+      } else {
+        dispatch(actions.load());
+      }
       dispatch(transactionLoadingModalActions.stopLoading());
-      dispatch(actions.load());
     } catch (e) {
       console.error(e);
+      dispatch(transactionLoadingModalActions.setError('error'));
       dispatch(transactionLoadingModalActions.stopLoading());
     }
   };
@@ -111,11 +119,19 @@ export function MyBids() {
     try {
       const signResult = await connectedWallet.sign(tx);
       dispatch(transactionLoadingModalActions.startLoading());
-      await lcd.tx.broadcast(signResult.result);
+      const broadCastResult = await lcd.tx.broadcast(signResult.result);
+      console.log(broadCastResult);
+      if (broadCastResult.raw_log.includes('fail')) {
+        dispatch(
+          transactionLoadingModalActions.setError(broadCastResult.raw_log),
+        );
+      } else {
+        dispatch(actions.load());
+      }
       dispatch(transactionLoadingModalActions.stopLoading());
-      dispatch(actions.load());
     } catch (e) {
       console.error(e);
+      dispatch(transactionLoadingModalActions.setError('error'));
       dispatch(transactionLoadingModalActions.stopLoading());
     }
   };
@@ -142,11 +158,19 @@ export function MyBids() {
     try {
       const signResult = await connectedWallet.sign(tx);
       dispatch(transactionLoadingModalActions.startLoading());
-      await lcd.tx.broadcast(signResult.result);
+      const broadCastResult = await lcd.tx.broadcast(signResult.result);
+      console.log(broadCastResult);
+      if (broadCastResult.raw_log.includes('fail')) {
+        dispatch(
+          transactionLoadingModalActions.setError(broadCastResult.raw_log),
+        );
+      } else {
+        dispatch(actions.load());
+      }
       dispatch(transactionLoadingModalActions.stopLoading());
-      dispatch(actions.load());
     } catch (e) {
       console.error(e);
+      dispatch(transactionLoadingModalActions.setError('error'));
       dispatch(transactionLoadingModalActions.stopLoading());
     }
   };
@@ -162,10 +186,14 @@ export function MyBids() {
   const handleActivateAll = async () => {
     if (!walletAddress || !connectedWallet || !collateralToken || !network)
       return;
+    const activatableBidIds = myBids
+      .filter(each => each.waitEnd !== null && each.timeLeft === 0)
+      .map(each => each.id);
+    if (activatableBidIds.length === 0) return;
     const msgs = fabricateActivateBid(
       network,
       walletAddress,
-      null,
+      activatableBidIds,
       collateralToken,
     );
     const { estimatedFeeGas, coinAmount } = await estimateGasFee(
@@ -181,11 +209,19 @@ export function MyBids() {
     try {
       const signResult = await connectedWallet.sign(tx);
       dispatch(transactionLoadingModalActions.startLoading());
-      await lcd.tx.broadcast(signResult.result);
+      const broadCastResult = await lcd.tx.broadcast(signResult.result);
+      console.log(broadCastResult);
+      if (broadCastResult.raw_log.includes('fail')) {
+        dispatch(
+          transactionLoadingModalActions.setError(broadCastResult.raw_log),
+        );
+      } else {
+        dispatch(actions.load());
+      }
       dispatch(transactionLoadingModalActions.stopLoading());
-      dispatch(actions.load());
     } catch (e) {
       console.error(e);
+      dispatch(transactionLoadingModalActions.setError('error'));
       dispatch(transactionLoadingModalActions.stopLoading());
     }
   };
@@ -212,11 +248,19 @@ export function MyBids() {
     try {
       const signResult = await connectedWallet.sign(tx);
       dispatch(transactionLoadingModalActions.startLoading());
-      await lcd.tx.broadcast(signResult.result);
+      const broadCastResult = await lcd.tx.broadcast(signResult.result);
+      console.log(broadCastResult);
+      if (broadCastResult.raw_log.includes('fail')) {
+        dispatch(
+          transactionLoadingModalActions.setError(broadCastResult.raw_log),
+        );
+      } else {
+        dispatch(actions.load());
+      }
       dispatch(transactionLoadingModalActions.stopLoading());
-      dispatch(actions.load());
     } catch (e) {
       console.error(e);
+      dispatch(transactionLoadingModalActions.setError('error'));
       dispatch(transactionLoadingModalActions.stopLoading());
     }
   };

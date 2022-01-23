@@ -15,3 +15,18 @@ export const selectLoading = createSelector(
   [selectSlice],
   state => state.loading,
 );
+
+export const selectIsError = createSelector(
+  [selectSlice],
+  state => state.isError,
+);
+
+export const selectErrorMessage = createSelector(
+  [selectSlice],
+  state => state.errorMessage,
+);
+
+export const selectLoaded = createSelector(
+  [selectSlice],
+  state => state.loaded,
+);

@@ -67,7 +67,6 @@ export const FALLBACK_GAS_PRICE_BOMBAY = {
 };
 
 export function DEFAULT_FALLBACK_GAS_PRICE(network: NetworkInfo) {
-  console.log('network', network);
   if (network?.chainID.startsWith('bombay')) {
     return FALLBACK_GAS_PRICE_BOMBAY;
   } else {

@@ -27,7 +27,6 @@ export function* getMyBids() {
       }, // query msg
     );
     if (result) {
-      console.log(result);
       yield put(
         actions.loaded(
           result.bids.map(each => ({
