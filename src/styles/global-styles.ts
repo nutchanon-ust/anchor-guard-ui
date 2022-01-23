@@ -10,12 +10,11 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Lato', sans-serif;
     padding-top: ${StyleConstants.NAV_BAR_HEIGHT};
   }
 
   body.fontLoaded {
-    font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
   
   p,

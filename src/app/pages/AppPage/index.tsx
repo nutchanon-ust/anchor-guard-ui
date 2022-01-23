@@ -22,10 +22,11 @@ export function AppPage() {
       />
 
       <Helmet>
-        <title>App Page</title>
+        <title>Anchor Guard</title>
         <meta
           name="description"
-          content="A React Boilerplate application homepage"
+          content="Anchor Liquidation Queue User Interface; Open Source, Free to Use and
+          No Fee"
         />
       </Helmet>
       <NavBar />
