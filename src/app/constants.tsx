@@ -5,9 +5,14 @@ export const ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS =
 export const ANCHOR_LIQUIDATION_QUEUE_TESTNET_CONTRACT_ADDRESS =
   'terra18j0wd0f62afcugw2rx5y8e6j5qjxd7d6qsc87r';
 
-export const BLUNA_ADDRESS = 'terra1kc87mu460fwkqte29rquh4hc20m54fxwtsx7gp';
+export const BLUNA_MAINNET_ADDRESS =
+  'terra1kc87mu460fwkqte29rquh4hc20m54fxwtsx7gp';
 export const BLUNA_TESTNET_ADDRESS =
   'terra1u0t35drzyy0mujj8rkdyzhe264uls4ug3wdp3x';
+export const BETH_MAINNET_ADDRESS =
+  'terra1dzhzukyezv0etz22ud940z7adyv7xgcjkahuun';
+export const BETH_TESTNET_ADDRESS =
+  'terra19mkj9nec6e3y5754tlnuz4vem7lzh4n0lc2s3l';
 
 export const MAINNET_LCD_URL = 'https://lcd.terra.dev';
 export const MAINNET_CHAIN_ID = 'columbus-5';
@@ -63,9 +68,25 @@ export const FALLBACK_GAS_PRICE_BOMBAY = {
 
 export function DEFAULT_FALLBACK_GAS_PRICE(network: NetworkInfo) {
   console.log('network', network);
-  if (network.chainID.startsWith('bombay')) {
+  if (network?.chainID.startsWith('bombay')) {
     return FALLBACK_GAS_PRICE_BOMBAY;
   } else {
     return FALLBACK_GAS_PRICE_COLUMNBUS;
+  }
+}
+
+export function BLUNA_ADDRESS(network: NetworkInfo) {
+  if (network?.chainID.startsWith('bombay')) {
+    return BLUNA_TESTNET_ADDRESS;
+  } else {
+    return BLUNA_MAINNET_ADDRESS;
+  }
+}
+
+export function BETH_ADDRESS(network: NetworkInfo) {
+  if (network?.chainID.startsWith('bombay')) {
+    return BETH_TESTNET_ADDRESS;
+  } else {
+    return BETH_MAINNET_ADDRESS;
   }
 }

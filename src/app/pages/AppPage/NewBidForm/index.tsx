@@ -7,14 +7,18 @@ import * as React from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { messages } from './messages';
-import { Form, Button, InputNumber } from 'antd';
+import { Form, Button, InputNumber, Select } from 'antd';
 import { CreateTxOptions, Fee, LCDClient } from '@terra-money/terra.js';
 import {
   ConnectedWallet,
   useConnectedWallet,
   useLCDClient,
 } from '@terra-money/wallet-provider';
-import { BLUNA_ADDRESS, BLUNA_TESTNET_ADDRESS } from 'app/constants';
+import {
+  BETH_ADDRESS,
+  BLUNA_ADDRESS,
+  BLUNA_TESTNET_ADDRESS,
+} from 'app/constants';
 import { useCallback, useEffect, useMemo } from 'react';
 import { estimateGasFee, fabricateNewBid } from 'utils/tx-helper';
 import { parseUnits } from 'ethers/lib/utils';
@@ -58,10 +62,11 @@ export function NewBidForm(props: Props) {
       String(form.getFieldValue('bidAmount')),
       6,
     ).toNumber();
+    const collateralToken = form.getFieldValue('collateralToken');
     const msgs = fabricateNewBid(
       walletAddress,
       premium,
-      BLUNA_TESTNET_ADDRESS,
+      collateralToken,
       ustAmount,
     );
     const { estimatedFeeGas, coinAmount } = await estimateGasFee(
@@ -89,9 +94,19 @@ export function NewBidForm(props: Props) {
       form={form}
       name="basic"
       labelCol={{ span: 4 }}
-      initialValues={{ premium: 1, bidAmount: 0 }}
+      initialValues={{
+        premium: 1,
+        bidAmount: 0,
+        collateralToken: BLUNA_ADDRESS(network),
+      }}
       autoComplete="off"
     >
+      <Form.Item label="Collateral Asset" name="collateralToken">
+        <Select>
+          <Select.Option value={BLUNA_ADDRESS(network)}>bLUNA</Select.Option>
+          <Select.Option value={BETH_ADDRESS(network)}>bETH</Select.Option>
+        </Select>
+      </Form.Item>
       <Form.Item
         label="Premium"
         name="premium"
