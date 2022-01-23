@@ -11,3 +11,8 @@ export const selectUserUstBalance = createSelector(
   [selectSlice],
   state => state.userUstBalance,
 );
+
+export const selectCollateralToken = createSelector(
+  [selectSlice],
+  state => state.collateralToken,
+);

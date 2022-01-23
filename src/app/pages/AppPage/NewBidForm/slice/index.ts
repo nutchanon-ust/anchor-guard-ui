@@ -7,6 +7,7 @@ import { NewBidState } from './types';
 
 export const initialState: NewBidState = {
   userUstBalance: 0,
+  collateralToken: null,
 };
 
 const slice = createSlice({
@@ -15,6 +16,9 @@ const slice = createSlice({
   reducers: {
     setUserUstBalance(state, action: PayloadAction<number>) {
       state.userUstBalance = Number(formatUnits(action.payload, 6));
+    },
+    setCollateralToken(state, action: PayloadAction<string>) {
+      state.collateralToken = action.payload;
     },
   },
 });

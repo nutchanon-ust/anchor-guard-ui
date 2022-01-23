@@ -24,7 +24,7 @@ import { estimateGasFee, fabricateNewBid } from 'utils/tx-helper';
 import { parseUnits } from 'ethers/lib/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNewBidSlice } from './slice';
-import { selectUserUstBalance } from './slice/selectors';
+import { selectCollateralToken, selectUserUstBalance } from './slice/selectors';
 
 interface Props {}
 
@@ -35,6 +35,7 @@ export function NewBidForm(props: Props) {
   const walletAddress = connectedWallet?.walletAddress;
   const network = connectedWallet?.network;
   const lcd = useLCDClient();
+  const collateralToken = useSelector(selectCollateralToken);
 
   const [form] = Form.useForm();
   const dispatch = useDispatch();
@@ -54,15 +55,19 @@ export function NewBidForm(props: Props) {
     fetchBalance();
   }, [fetchBalance]);
 
+  useEffect(() => {
+    if (network) dispatch(actions.setCollateralToken(BLUNA_ADDRESS(network)));
+  }, [network]);
+
   const postTx = async () => {
-    if (!connectedWallet || !lcd) return;
+    console.log('collateralToken', collateralToken);
+    if (!connectedWallet || !lcd || !collateralToken) return;
     await form.validateFields();
     const premium = Number(form.getFieldValue('premium'));
     const ustAmount = parseUnits(
       String(form.getFieldValue('bidAmount')),
       6,
     ).toNumber();
-    const collateralToken = form.getFieldValue('collateralToken');
     const msgs = fabricateNewBid(
       walletAddress,
       premium,
@@ -88,6 +93,12 @@ export function NewBidForm(props: Props) {
     }
   };
 
+  const handleValuesChange = ({ collateralToken }) => {
+    if (collateralToken) {
+      dispatch(actions.setCollateralToken(collateralToken));
+    }
+  };
+
   const userUstBalance = useSelector(selectUserUstBalance);
   return (
     <Form
@@ -100,6 +111,7 @@ export function NewBidForm(props: Props) {
         collateralToken: BLUNA_ADDRESS(network),
       }}
       autoComplete="off"
+      onValuesChange={handleValuesChange}
     >
       <Form.Item label="Collateral Asset" name="collateralToken">
         <Select>
