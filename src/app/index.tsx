@@ -32,11 +32,15 @@ export function App() {
   return (
     <BrowserRouter>
       <Helmet
-        titleTemplate="%s - React Boilerplate"
-        defaultTitle="React Boilerplate"
+        titleTemplate="%s"
+        defaultTitle="Anchor Guard"
         htmlAttributes={{ lang: i18n.language }}
       >
-        <meta name="description" content="A React Boilerplate application" />
+        <meta
+          name="description"
+          content="Anchor Liquidation Queue User Interface; Open Source, Free to Use and
+          No Fee"
+        />
       </Helmet>
 
       <Switch>

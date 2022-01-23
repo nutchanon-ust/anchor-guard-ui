@@ -15,7 +15,7 @@ export function AppPage() {
   return (
     <>
       <Alert
-        message="Anchor Guard or any website will never ask for you seed phrase/mnemonic keys. Do not ever give them to any one."
+        message="Anchor Guard or any website will never ask for your seed phrase/mnemonic keys. Do not ever give them to any one."
         type="warning"
         showIcon
         closable
@@ -47,7 +47,14 @@ export function AppPage() {
           >
             Donate
           </a>{' '}
-          | GitHub
+          |{' '}
+          <a
+            href="https://github.com/nutchanon-ust/anchor-guard-ui"
+            target={'_blank'}
+            rel="noreferrer"
+          >
+            GitHub
+          </a>
         </Footer>
       </PageWrapper>
     </>
