@@ -7,7 +7,7 @@ import * as React from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import { messages } from './messages';
-import { Form, Button, InputNumber, Select } from 'antd';
+import { Form, Button, InputNumber, Select, Typography } from 'antd';
 import { CreateTxOptions, Fee } from '@terra-money/terra.js';
 import {
   ConnectedWallet,
@@ -23,6 +23,8 @@ import { useNewBidSlice } from './slice';
 import { selectCollateralToken, selectUserUstBalance } from './slice/selectors';
 import { useMyBidsSlice } from '../MyBids/slice';
 import { useTransactionLoadingModalSlice } from 'app/components/TransactionLoadingModal/slice';
+
+const { Title } = Typography;
 
 interface Props {}
 
@@ -109,7 +111,7 @@ export function NewBidForm(props: Props) {
   const userUstBalance = useSelector(selectUserUstBalance);
   return (
     <>
-      <h1>New Bid</h1>
+      <Title level={2}>New Bid</Title>
       <Form
         form={form}
         name="basic"

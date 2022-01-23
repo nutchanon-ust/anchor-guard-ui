@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@craco/craco": "6.4.3",
     "@reduxjs/toolkit": "1.7.1",
     "@terra-money/terra.js": "3.0.4",
     "@terra-money/wallet-provider": "3.7.1",
@@ -24,6 +25,7 @@
     "@types/webpack-env": "1.16.3",
     "antd": "4.18.4",
     "chalk": "4.1.2",
+    "craco-less": "2.0.0",
     "cross-env": "7.0.3",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-prettier": "4.0.0",
@@ -67,10 +69,10 @@
     "web-vitals": "2.1.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "craco eject",
     "start:prod": "yarn run build && serve -s build",
     "test:generators": "ts-node ./internals/testing/generators/test-generators.ts",
     "checkTs": "tsc --noEmit",

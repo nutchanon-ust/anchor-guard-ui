@@ -11,10 +11,10 @@ export function NavBar() {
   return (
     <Wrapper>
       <Row>
-        <Col span={16}>
+        <Col span={12}>
           <Logo />
         </Col>
-        <Col span={8} style={{ textAlign: 'right' }}>
+        <Col span={12} style={{ textAlign: 'right' }}>
           <WalletSelector />
         </Col>
       </Row>
@@ -30,7 +30,6 @@ const Wrapper = styled.header`
   padding: 15px;
   top: 0;
   width: 100%;
-  background-color: ${p => p.theme.background};
   z-index: 2;
 
   @supports (backdrop-filter: blur(10px)) {

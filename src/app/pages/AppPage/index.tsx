@@ -2,10 +2,14 @@ import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { NavBar } from 'app/components/NavBar';
 import { PageWrapper } from 'app/components/PageWrapper';
-import { Row, Col } from 'antd';
+import { Row, Col, Typography, Layout } from 'antd';
 import { MyBids } from './MyBids';
 import { NewBidForm } from './NewBidForm';
 import { TransactionLoadingModal } from 'app/components/TransactionLoadingModal';
+import styled from 'styled-components';
+
+const { Title } = Typography;
+const { Footer } = Layout;
 
 export function AppPage() {
   return (
@@ -19,10 +23,29 @@ export function AppPage() {
       </Helmet>
       <NavBar />
       <PageWrapper>
+        <Title level={5}>
+          Anchor Liquidation Queue User Interface; Open Source, Free to Use and
+          No Fee
+        </Title>
         <NewBidForm />
         <MyBids />
         <TransactionLoadingModal />
+        <Footer style={{ textAlign: 'center' }}>
+          Created by nutchanon.ust |{' '}
+          <a
+            href="https://finder.terra.money/mainnet/address/terra18w0466472xxwkwe4dvketx345h4c7eg5ypcmza"
+            target={'_blank'}
+            rel="noreferrer"
+          >
+            Donate
+          </a>{' '}
+          | GitHub
+        </Footer>
       </PageWrapper>
     </>
   );
 }
+
+const Description = styled.div`
+  font-weight: normal;
+`;

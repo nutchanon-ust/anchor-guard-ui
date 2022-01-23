@@ -12,7 +12,6 @@ export function Logo() {
         />
       </div>
       <Title>Anchor Guard</Title>
-      <Description>Anchor Liquidation Queue UI</Description>
     </Wrapper>
   );
 }
@@ -23,7 +22,10 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.div`
-  font-size: 1.25rem;
+  font-size: 1rem;
+  @media only screen and (min-width: 768px) {
+    font-size: 1.5rem;
+  }
   color: ${p => p.theme.text};
   font-weight: bold;
   margin-right: 1rem;

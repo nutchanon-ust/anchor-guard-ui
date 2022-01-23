@@ -7,7 +7,7 @@ import {
   selectWalletAddress,
 } from './slice/selectors';
 import { useMyBidsSlice } from './slice';
-import { Table, Button, Row, Col, Space } from 'antd';
+import { Table, Button, Row, Col, Typography } from 'antd';
 import { useConnectedWallet, useLCDClient } from '@terra-money/wallet-provider';
 import {
   estimateGasFee,
@@ -20,6 +20,7 @@ import { Bid } from './slice/types';
 import { selectCollateralToken } from '../NewBidForm/slice/selectors';
 import { useTransactionLoadingModalSlice } from 'app/components/TransactionLoadingModal/slice';
 
+const { Title } = Typography;
 const { Column } = Table;
 
 export function MyBids() {
@@ -222,7 +223,7 @@ export function MyBids() {
 
   return (
     <>
-      <h1>My Bids</h1>
+      <Title level={2}>My Bids</Title>
       <div style={{ textAlign: 'right' }}>
         <Button
           style={{ margin: '5px' }}
@@ -235,7 +236,7 @@ export function MyBids() {
           Claim All
         </Button>
       </div>
-      <Table dataSource={myBids} rowKey={bid => bid.id}>
+      <Table dataSource={myBids} rowKey={bid => bid.id} scroll={{ x: 1300 }}>
         <Column
           title="Premium"
           dataIndex="premium"
@@ -275,7 +276,8 @@ export function MyBids() {
         <Column
           title="Action"
           key="action"
-          width={50}
+          fixed="right"
+          width={200}
           render={(text, record: any) => (
             <Row>
               {record.bidStatus !== 'Active' && (

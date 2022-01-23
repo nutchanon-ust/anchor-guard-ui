@@ -16,7 +16,7 @@ import FontFaceObserver from 'fontfaceobserver';
 // Use consistent styling
 import 'sanitize.css/sanitize.css';
 
-import 'antd/dist/antd.css';
+import 'antd/dist/antd.dark.less';
 
 import { App } from 'app';
 
