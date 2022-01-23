@@ -7,7 +7,7 @@ import {
   selectWalletAddress,
 } from './slice/selectors';
 import { useMyBidsSlice } from './slice';
-import { Table, Button, Row, Col } from 'antd';
+import { Table, Button, Row, Col, Space } from 'antd';
 import { useConnectedWallet, useLCDClient } from '@terra-money/wallet-provider';
 import {
   estimateGasFee,
@@ -158,9 +158,83 @@ export function MyBids() {
     return () => clearTimeout(timer);
   });
 
+  const handleActivateAll = async () => {
+    if (!walletAddress || !connectedWallet || !collateralToken || !network)
+      return;
+    const msgs = fabricateActivateBid(
+      network,
+      walletAddress,
+      null,
+      collateralToken,
+    );
+    const { estimatedFeeGas, coinAmount } = await estimateGasFee(
+      connectedWallet.network,
+      walletAddress,
+      msgs,
+      lcd,
+    );
+    const tx: CreateTxOptions = {
+      msgs,
+      fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
+    };
+    try {
+      const signResult = await connectedWallet.sign(tx);
+      dispatch(transactionLoadingModalActions.startLoading());
+      await lcd.tx.broadcast(signResult.result);
+      dispatch(transactionLoadingModalActions.stopLoading());
+      dispatch(actions.load());
+    } catch (e) {
+      console.error(e);
+      dispatch(transactionLoadingModalActions.stopLoading());
+    }
+  };
+
+  const handleClaimAll = async () => {
+    if (!walletAddress || !connectedWallet || !collateralToken || !network)
+      return;
+    const msgs = fabricateClaimBid(
+      network,
+      walletAddress,
+      null,
+      collateralToken,
+    );
+    const { estimatedFeeGas, coinAmount } = await estimateGasFee(
+      connectedWallet.network,
+      walletAddress,
+      msgs,
+      lcd,
+    );
+    const tx: CreateTxOptions = {
+      msgs,
+      fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
+    };
+    try {
+      const signResult = await connectedWallet.sign(tx);
+      dispatch(transactionLoadingModalActions.startLoading());
+      await lcd.tx.broadcast(signResult.result);
+      dispatch(transactionLoadingModalActions.stopLoading());
+      dispatch(actions.load());
+    } catch (e) {
+      console.error(e);
+      dispatch(transactionLoadingModalActions.stopLoading());
+    }
+  };
+
   return (
     <>
       <h1>My Bids</h1>
+      <div style={{ textAlign: 'right' }}>
+        <Button
+          style={{ margin: '5px' }}
+          onClick={handleActivateAll}
+          type="primary"
+        >
+          Activate All
+        </Button>
+        <Button style={{ margin: '5px' }} onClick={handleClaimAll}>
+          Claim All
+        </Button>
+      </div>
       <Table dataSource={myBids} rowKey={bid => bid.id}>
         <Column
           title="Premium"

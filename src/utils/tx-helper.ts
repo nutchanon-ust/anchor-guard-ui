@@ -80,7 +80,7 @@ export function fabricateCancelBid(
 export function fabricateClaimBid(
   network: NetworkInfo,
   walletAddress: string,
-  bidIdxs: string[],
+  bidIdxs: string[] | null,
   collateralToken: string,
 ): MsgExecuteContract[] {
   return [
@@ -100,7 +100,7 @@ export function fabricateClaimBid(
 export function fabricateActivateBid(
   network: NetworkInfo,
   walletAddress: string,
-  bidIdxs: string[],
+  bidIdxs: string[] | null,
   collateralToken: string,
 ): MsgExecuteContract[] {
   return [
