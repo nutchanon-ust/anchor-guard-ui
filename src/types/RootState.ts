@@ -1,5 +1,4 @@
 import { MyBidsState } from 'app/pages/AppPage/MyBids/slice/types';
-import { GithubRepoFormState } from 'app/pages/HomePage/Features/GithubRepoForm/slice/types';
 import { ThemeState } from 'styles/theme/slice/types';
 import { NewBidState } from 'app/pages/AppPage/NewBidForm/slice/types';
 import { WalletConnectionState } from 'app/components/WalletSelector/slice/types';
@@ -14,7 +13,6 @@ import { TransactionLoadingModalState } from 'app/components/TransactionLoadingM
 */
 export interface RootState {
   theme?: ThemeState;
-  githubRepoForm?: GithubRepoFormState;
   myBids?: MyBidsState;
   newBid?: NewBidState;
   walletConnection?: WalletConnectionState;
