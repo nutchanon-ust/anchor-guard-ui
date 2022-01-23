@@ -20,7 +20,11 @@ import {
 } from '@terra-money/wallet-provider';
 import { BETH_ADDRESS, BLUNA_ADDRESS } from 'app/constants';
 import { useCallback, useEffect } from 'react';
-import { estimateGasFee, fabricateNewBid } from 'utils/tx-helper';
+import {
+  estimateGasFee,
+  fabricateNewBid,
+  validateBroadcastResult,
+} from 'utils/tx-helper';
 import { parseUnits } from 'ethers/lib/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNewBidSlice } from './slice';
@@ -95,12 +99,11 @@ export function NewBidForm(props: Props) {
     try {
       const signResult = await connectedWallet.sign(tx);
       dispatch(transactionLoadingModalActions.startLoading());
-      const broadCastResult = await lcd.tx.broadcast(signResult.result);
-      console.log(broadCastResult);
-      if (broadCastResult.raw_log.includes('fail')) {
-        dispatch(
-          transactionLoadingModalActions.setError(broadCastResult.raw_log),
-        );
+      const { isError, errorMessage } = validateBroadcastResult(
+        await lcd.tx.broadcast(signResult.result),
+      );
+      if (isError) {
+        dispatch(transactionLoadingModalActions.setError(errorMessage));
       } else {
         dispatch(myBidsActions.load());
       }

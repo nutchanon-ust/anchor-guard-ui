@@ -14,6 +14,7 @@ import {
   fabricateActivateBid,
   fabricateCancelBid,
   fabricateClaimBid,
+  validateBroadcastResult,
 } from 'utils/tx-helper';
 import { CreateTxOptions, Fee, LCDClient } from '@terra-money/terra.js';
 import { Bid } from './slice/types';
@@ -86,12 +87,11 @@ export function MyBids() {
     try {
       const signResult = await connectedWallet.sign(tx);
       dispatch(transactionLoadingModalActions.startLoading());
-      const broadCastResult = await lcd.tx.broadcast(signResult.result);
-      console.log(broadCastResult);
-      if (broadCastResult.raw_log.includes('fail')) {
-        dispatch(
-          transactionLoadingModalActions.setError(broadCastResult.raw_log),
-        );
+      const { isError, errorMessage } = validateBroadcastResult(
+        await lcd.tx.broadcast(signResult.result),
+      );
+      if (isError) {
+        dispatch(transactionLoadingModalActions.setError(errorMessage));
       } else {
         dispatch(actions.load());
       }
@@ -119,12 +119,11 @@ export function MyBids() {
     try {
       const signResult = await connectedWallet.sign(tx);
       dispatch(transactionLoadingModalActions.startLoading());
-      const broadCastResult = await lcd.tx.broadcast(signResult.result);
-      console.log(broadCastResult);
-      if (broadCastResult.raw_log.includes('fail')) {
-        dispatch(
-          transactionLoadingModalActions.setError(broadCastResult.raw_log),
-        );
+      const { isError, errorMessage } = validateBroadcastResult(
+        await lcd.tx.broadcast(signResult.result),
+      );
+      if (isError) {
+        dispatch(transactionLoadingModalActions.setError(errorMessage));
       } else {
         dispatch(actions.load());
       }
@@ -158,12 +157,11 @@ export function MyBids() {
     try {
       const signResult = await connectedWallet.sign(tx);
       dispatch(transactionLoadingModalActions.startLoading());
-      const broadCastResult = await lcd.tx.broadcast(signResult.result);
-      console.log(broadCastResult);
-      if (broadCastResult.raw_log.includes('fail')) {
-        dispatch(
-          transactionLoadingModalActions.setError(broadCastResult.raw_log),
-        );
+      const { isError, errorMessage } = validateBroadcastResult(
+        await lcd.tx.broadcast(signResult.result),
+      );
+      if (isError) {
+        dispatch(transactionLoadingModalActions.setError(errorMessage));
       } else {
         dispatch(actions.load());
       }
@@ -209,12 +207,11 @@ export function MyBids() {
     try {
       const signResult = await connectedWallet.sign(tx);
       dispatch(transactionLoadingModalActions.startLoading());
-      const broadCastResult = await lcd.tx.broadcast(signResult.result);
-      console.log(broadCastResult);
-      if (broadCastResult.raw_log.includes('fail')) {
-        dispatch(
-          transactionLoadingModalActions.setError(broadCastResult.raw_log),
-        );
+      const { isError, errorMessage } = validateBroadcastResult(
+        await lcd.tx.broadcast(signResult.result),
+      );
+      if (isError) {
+        dispatch(transactionLoadingModalActions.setError(errorMessage));
       } else {
         dispatch(actions.load());
       }
@@ -248,12 +245,11 @@ export function MyBids() {
     try {
       const signResult = await connectedWallet.sign(tx);
       dispatch(transactionLoadingModalActions.startLoading());
-      const broadCastResult = await lcd.tx.broadcast(signResult.result);
-      console.log(broadCastResult);
-      if (broadCastResult.raw_log.includes('fail')) {
-        dispatch(
-          transactionLoadingModalActions.setError(broadCastResult.raw_log),
-        );
+      const { isError, errorMessage } = validateBroadcastResult(
+        await lcd.tx.broadcast(signResult.result),
+      );
+      if (isError) {
+        dispatch(transactionLoadingModalActions.setError(errorMessage));
       } else {
         dispatch(actions.load());
       }

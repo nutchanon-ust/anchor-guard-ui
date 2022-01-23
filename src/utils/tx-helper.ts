@@ -117,3 +117,15 @@ export function fabricateActivateBid(
     ),
   ];
 }
+
+export interface BroadcastResult {
+  isError: boolean;
+  errorMessage: string;
+}
+
+export function validateBroadcastResult(result: any) {
+  return {
+    isError: result.code !== 0,
+    errorMessage: result.raw_log,
+  };
+}
