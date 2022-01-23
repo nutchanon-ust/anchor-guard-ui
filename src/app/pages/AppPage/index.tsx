@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { NavBar } from 'app/components/NavBar';
 import { PageWrapper } from 'app/components/PageWrapper';
-import { Row, Col, Typography, Layout } from 'antd';
+import { Row, Col, Typography, Layout, Alert } from 'antd';
 import { MyBids } from './MyBids';
 import { NewBidForm } from './NewBidForm';
 import { TransactionLoadingModal } from 'app/components/TransactionLoadingModal';
@@ -14,6 +14,13 @@ const { Footer } = Layout;
 export function AppPage() {
   return (
     <>
+      <Alert
+        message="Anchor Guard or any website will never ask for you seed phrase/mnemonic keys. Do not ever give them to any one."
+        type="warning"
+        showIcon
+        closable
+      />
+
       <Helmet>
         <title>App Page</title>
         <meta
