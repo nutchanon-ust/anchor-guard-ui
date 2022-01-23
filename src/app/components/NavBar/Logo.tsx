@@ -4,8 +4,15 @@ import styled from 'styled-components/macro';
 export function Logo() {
   return (
     <Wrapper>
-      <Title>moonknight</Title>
-      <Description>Anchor Liquidation Queue UI</Description>
+      <div className="logo">
+        <img
+          style={{ width: '2em', marginRight: '5px' }}
+          src="https://astroport.fi/anchor.png"
+          alt="logo"
+        />
+      </div>
+      <Title>Anchor Guard</Title>
+      <Description>Free-for-all Anchor Liquidation Queue UI</Description>
     </Wrapper>
   );
 }
