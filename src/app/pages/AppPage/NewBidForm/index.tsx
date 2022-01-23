@@ -115,7 +115,7 @@ export function NewBidForm(props: Props) {
       >
         <InputNumber
           addonAfter="UST"
-          min={0}
+          min={0.000001}
           max={userUstBalance}
           style={{ width: '100%' }}
           autoComplete="off"

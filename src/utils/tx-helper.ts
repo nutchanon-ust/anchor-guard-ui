@@ -74,6 +74,25 @@ export function fabricateCancelBid(
   ];
 }
 
+export function fabricateClaimBid(
+  walletAddress: string,
+  bidIdxs: string[],
+  collateralToken: string,
+): MsgExecuteContract[] {
+  return [
+    new MsgExecuteContract(
+      walletAddress,
+      ANCHOR_LIQUIDATION_QUEUE_TESTNET_CONTRACT_ADDRESS,
+      {
+        claim_liquidations: {
+          bids_idx: bidIdxs,
+          collateral_token: collateralToken,
+        },
+      },
+    ),
+  ];
+}
+
 export function fabricateActivateBid(
   walletAddress: string,
   bidIdxs: string[],

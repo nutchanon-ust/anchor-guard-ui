@@ -7,12 +7,13 @@ import {
   selectWalletAddress,
 } from './slice/selectors';
 import { useMyBidsSlice } from './slice';
-import { Table, Button } from 'antd';
+import { Table, Button, Row, Col } from 'antd';
 import { useConnectedWallet, useLCDClient } from '@terra-money/wallet-provider';
 import {
   estimateGasFee,
   fabricateActivateBid,
   fabricateCancelBid,
+  fabricateClaimBid,
 } from 'utils/tx-helper';
 import { CreateTxOptions, Fee, LCDClient } from '@terra-money/terra.js';
 import { BLUNA_TESTNET_ADDRESS } from 'app/constants';
@@ -101,6 +102,32 @@ export function MyBids() {
     }
   };
 
+  const handleClaimBid = async bidIdx => {
+    if (!walletAddress || !connectedWallet) return;
+    const msgs = fabricateClaimBid(
+      walletAddress,
+      [bidIdx],
+      BLUNA_TESTNET_ADDRESS,
+    );
+    const { estimatedFeeGas, coinAmount } = await estimateGasFee(
+      connectedWallet.network,
+      walletAddress,
+      msgs,
+      lcd,
+    );
+    const tx: CreateTxOptions = {
+      msgs,
+      fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
+    };
+    try {
+      const result = await connectedWallet.post(tx);
+      console.log(result);
+      dispatch(actions.load());
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   useEffect(() => {
     const timer = setTimeout(() => {
       dispatch(actions.updateTimeLeft());
@@ -126,23 +153,35 @@ export function MyBids() {
       <Column
         title="Action"
         key="action"
+        width={50}
         render={(text, record: any) => (
-          <>
+          <Row>
             {record.bidStatus !== 'Active' && (
-              <Action
-                type="primary"
-                loading={record.timeLeft > 0}
-                onClick={() => handleActivateBid(record.id)}
-              >
-                {record.timeLeft > 0
-                  ? `Activate in ${record.timeLeft}s`
-                  : `Activate`}
-              </Action>
+              <Col span={24}>
+                <Action
+                  type="primary"
+                  loading={record.timeLeft > 0}
+                  onClick={() => handleActivateBid(record.id)}
+                >
+                  {record.timeLeft > 0
+                    ? `Activate in ${record.timeLeft}s`
+                    : `Activate`}
+                </Action>
+              </Col>
             )}
-            <Action danger onClick={() => handleCancelBid(record.id)}>
-              Cancel
-            </Action>
-          </>
+            {record.amountFilled > 0 && (
+              <Col span={24}>
+                <Action onClick={() => handleClaimBid(record.id)}>Claim</Action>
+              </Col>
+            )}
+            {record.amountFilled == 0 && (
+              <Col span={24}>
+                <Action danger onClick={() => handleCancelBid(record.id)}>
+                  Cancel
+                </Action>
+              </Col>
+            )}
+          </Row>
         )}
       />
     </Table>
@@ -151,6 +190,7 @@ export function MyBids() {
 
 const Action = styled(Button)`
   margin: 5px;
+  width: 100%;
 `;
 function useMemo(arg0: () => any, arg1: any[]) {
   throw new Error('Function not implemented.');

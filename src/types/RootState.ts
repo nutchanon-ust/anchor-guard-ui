@@ -3,7 +3,6 @@ import { GithubRepoFormState } from 'app/pages/HomePage/Features/GithubRepoForm/
 import { ThemeState } from 'styles/theme/slice/types';
 import { NewBidState } from 'app/pages/AppPage/NewBidForm/slice/types';
 import { WalletConnectionState } from 'app/components/WalletSelector/slice/types';
-import { ActivateBidButtonState } from 'app/pages/AppPage/MyBids/ActivateBidButton/slice/types';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
 /* 
@@ -18,6 +17,5 @@ export interface RootState {
   myBids?: MyBidsState;
   newBid?: NewBidState;
   walletConnection?: WalletConnectionState;
-  activateBidButton?: ActivateBidButtonState;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }
