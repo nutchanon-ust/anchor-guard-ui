@@ -55,6 +55,10 @@ export function AppPage() {
           >
             GitHub
           </a>
+          | Logo taken from{' '}
+          <a href="https://astroport.fi/" target={'_blank'} rel="noreferrer">
+            Astroport
+          </a>
         </Footer>
       </PageWrapper>
     </>
