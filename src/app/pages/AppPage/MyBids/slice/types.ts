@@ -9,10 +9,10 @@ export interface MyBidsState {
 
 export interface Bid {
   id: string;
-  premium: string;
-  bidRemaining: string;
+  premium: number;
+  bidRemaining: number;
   bidStatus: string;
-  amountFilled: string;
+  amountFilled: number;
   waitEnd: number;
   timeLeft: number;
 }

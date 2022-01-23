@@ -35,10 +35,12 @@ export function* getMyBids() {
         actions.loaded(
           result.bids.map(each => ({
             id: each.idx,
-            premium: `${each.premium_slot}%`,
-            bidRemaining: formatUnits(each.amount, 6),
+            premium: each.premium_slot,
+            bidRemaining: Number(formatUnits(each.amount, 6)),
             bidStatus: each.wait_end === null ? 'Active' : 'Pending',
-            amountFilled: formatUnits(each.pending_liquidated_collateral, 6),
+            amountFilled: Number(
+              formatUnits(each.pending_liquidated_collateral, 6),
+            ),
             waitEnd: each.wait_end,
           })),
         ),

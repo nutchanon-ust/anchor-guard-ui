@@ -17,6 +17,7 @@ import {
 } from 'utils/tx-helper';
 import { CreateTxOptions, Fee, LCDClient } from '@terra-money/terra.js';
 import { BLUNA_TESTNET_ADDRESS } from 'app/constants';
+import { Bid } from './slice/types';
 
 const { Column } = Table;
 
@@ -138,17 +139,41 @@ export function MyBids() {
 
   return (
     <Table dataSource={myBids} rowKey={bid => bid.id}>
-      <Column title="Premium" dataIndex="premium" key="premium" />
+      <Column
+        title="Premium"
+        dataIndex="premium"
+        key="premium"
+        render={text => `${text}%`}
+        sortDirections={['ascend', 'descend']}
+        sorter={(a: Bid, b: Bid) => {
+          return a.premium - b.premium;
+        }}
+        defaultSortOrder={'ascend'}
+      />
       <Column
         title="Bid Remaining"
         dataIndex="bidRemaining"
         key="bidRemaining"
+        sortDirections={['ascend', 'descend']}
+        sorter={(a: Bid, b: Bid) => {
+          return a.bidRemaining - b.bidRemaining;
+        }}
       />
-      <Column title="Bid Status" dataIndex="bidStatus" key="bidStatus" />
+      <Column
+        title="Bid Status"
+        dataIndex="bidStatus"
+        key="bidStatus"
+        sorter={(a: Bid, b: Bid) => {
+          return a.bidStatus > b.bidStatus ? 1 : -1;
+        }}
+      />
       <Column
         title="Amount Filled"
         dataIndex="amountFilled"
         key="amountFilled"
+        sorter={(a: Bid, b: Bid) => {
+          return a.amountFilled - b.amountFilled;
+        }}
       />
       <Column
         title="Action"
