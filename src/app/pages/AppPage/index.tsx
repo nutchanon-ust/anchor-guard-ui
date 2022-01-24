@@ -40,44 +40,44 @@ export function AppPage() {
         <NewBidForm />
         <MyBids />
         <TransactionLoadingModal />
-        <Footer style={{ textAlign: 'center' }}>
-          <div>
-            Created by nutchanon.ust |{' '}
-            <a
-              href="https://finder.terra.money/mainnet/address/terra18w0466472xxwkwe4dvketx345h4c7eg5ypcmza"
-              target={'_blank'}
-              rel="noreferrer"
-            >
-              Donate
-            </a>{' '}
-            |{' '}
-            <a
-              href="https://github.com/nutchanon-ust/anchor-guard-ui"
-              target={'_blank'}
-              rel="noreferrer"
-            >
-              GitHub
-            </a>
-            | Logo taken from{' '}
-            <a href="https://astroport.fi/" target={'_blank'} rel="noreferrer">
-              Astroport
-            </a>
-            |{' '}
-            <a
-              target={'_blank'}
-              rel="noreferrer"
-              href="mailto:anchor.guard.xyz@gmail.com
-"
-            >
-              Bug Report
-            </a>
-          </div>
-          <div>
-            DISCLAIMER: Use Anchor Guard at you own risk. The contributors of
-            Anchor Guard are not responsible for any loss of funds.
-          </div>
-        </Footer>
       </PageWrapper>
+      <Footer style={{ textAlign: 'center' }}>
+        <div>
+          Created by nutchanon.ust |{' '}
+          <a
+            href="https://finder.terra.money/mainnet/address/terra18w0466472xxwkwe4dvketx345h4c7eg5ypcmza"
+            target={'_blank'}
+            rel="noreferrer"
+          >
+            Donate
+          </a>{' '}
+          |{' '}
+          <a
+            href="https://github.com/nutchanon-ust/anchor-guard-ui"
+            target={'_blank'}
+            rel="noreferrer"
+          >
+            GitHub
+          </a>
+          | Logo taken from{' '}
+          <a href="https://astroport.fi/" target={'_blank'} rel="noreferrer">
+            Astroport
+          </a>
+          |{' '}
+          <a
+            target={'_blank'}
+            rel="noreferrer"
+            href="mailto:anchor.guard.xyz@gmail.com
+"
+          >
+            Bug Report
+          </a>
+        </div>
+        <div>
+          DISCLAIMER: Use Anchor Guard at you own risk. The contributors of
+          Anchor Guard are not responsible for any loss of funds.
+        </div>
+      </Footer>
     </>
   );
 }
