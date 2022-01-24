@@ -1,6 +1,7 @@
 import { NetworkInfo } from '@terra-money/wallet-provider';
 
 export const APP_MEMO = 'anchor-guard.xyz';
+export const GAS_BUFFER = 3000; // 0.003 UST; This is to prevent sometimes fewer UST were supplied causing insufficient gas
 
 export const ANCHOR_LIQUIDATION_QUEUE_MAINNET_CONTRACT_ADDRESS =
   'terra1e25zllgag7j9xsun3me4stnye2pcg66234je3u';

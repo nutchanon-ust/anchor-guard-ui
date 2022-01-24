@@ -10,7 +10,9 @@ import { messages } from './messages';
 import { Form, Button, InputNumber, Select, Typography } from 'antd';
 import {
   BlockTxBroadcastResult,
+  Coins,
   CreateTxOptions,
+  Dec,
   Fee,
 } from '@terra-money/terra.js';
 import {
@@ -87,12 +89,24 @@ export function NewBidForm(props: Props) {
       collateralToken,
       ustAmount,
     );
-    const { estimatedFeeGas, coinAmount } = await estimateGasFee(
-      connectedWallet.network,
-      walletAddress,
-      msgs,
-      lcd,
-    );
+    let estimatedFeeGas: Dec, coinAmount: Coins;
+    try {
+      ({ estimatedFeeGas, coinAmount } = await estimateGasFee(
+        connectedWallet.network,
+        walletAddress,
+        msgs,
+        lcd,
+      ));
+    } catch (e) {
+      dispatch(
+        transactionLoadingModalActions.setError(
+          //@ts-ignore
+          JSON.stringify(e.response.data),
+        ),
+      );
+      dispatch(transactionLoadingModalActions.stopLoading());
+      return;
+    }
     const tx: CreateTxOptions = {
       msgs,
       fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),

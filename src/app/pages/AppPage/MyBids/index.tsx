@@ -79,12 +79,24 @@ export function MyBids() {
       [bidIdx],
       collateralToken,
     );
-    const { estimatedFeeGas, coinAmount } = await estimateGasFee(
-      connectedWallet.network,
-      walletAddress,
-      msgs,
-      lcd,
-    );
+    let estimatedFeeGas, coinAmount;
+    try {
+      ({ estimatedFeeGas, coinAmount } = await estimateGasFee(
+        connectedWallet.network,
+        walletAddress,
+        msgs,
+        lcd,
+      ));
+    } catch (e) {
+      dispatch(
+        transactionLoadingModalActions.setError(
+          //@ts-ignore
+          JSON.stringify(e.response.data),
+        ),
+      );
+      dispatch(transactionLoadingModalActions.stopLoading());
+      return;
+    }
     const tx: CreateTxOptions = {
       msgs,
       fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
@@ -96,12 +108,24 @@ export function MyBids() {
   const handleCancelBid = async bidIdx => {
     if (!walletAddress || !connectedWallet || !network) return;
     const msgs = fabricateCancelBid(network, walletAddress, bidIdx);
-    const { estimatedFeeGas, coinAmount } = await estimateGasFee(
-      connectedWallet.network,
-      walletAddress,
-      msgs,
-      lcd,
-    );
+    let estimatedFeeGas, coinAmount;
+    try {
+      ({ estimatedFeeGas, coinAmount } = await estimateGasFee(
+        connectedWallet.network,
+        walletAddress,
+        msgs,
+        lcd,
+      ));
+    } catch (e) {
+      dispatch(
+        transactionLoadingModalActions.setError(
+          //@ts-ignore
+          JSON.stringify(e.response.data),
+        ),
+      );
+      dispatch(transactionLoadingModalActions.stopLoading());
+      return;
+    }
     const tx: CreateTxOptions = {
       msgs,
       fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
@@ -119,12 +143,24 @@ export function MyBids() {
       [bidIdx],
       collateralToken,
     );
-    const { estimatedFeeGas, coinAmount } = await estimateGasFee(
-      connectedWallet.network,
-      walletAddress,
-      msgs,
-      lcd,
-    );
+    let estimatedFeeGas, coinAmount;
+    try {
+      ({ estimatedFeeGas, coinAmount } = await estimateGasFee(
+        connectedWallet.network,
+        walletAddress,
+        msgs,
+        lcd,
+      ));
+    } catch (e) {
+      dispatch(
+        transactionLoadingModalActions.setError(
+          //@ts-ignore
+          JSON.stringify(e.response.data),
+        ),
+      );
+      dispatch(transactionLoadingModalActions.stopLoading());
+      return;
+    }
     const tx: CreateTxOptions = {
       msgs,
       fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
@@ -154,12 +190,24 @@ export function MyBids() {
       activatableBidIds,
       collateralToken,
     );
-    const { estimatedFeeGas, coinAmount } = await estimateGasFee(
-      connectedWallet.network,
-      walletAddress,
-      msgs,
-      lcd,
-    );
+    let estimatedFeeGas, coinAmount;
+    try {
+      ({ estimatedFeeGas, coinAmount } = await estimateGasFee(
+        connectedWallet.network,
+        walletAddress,
+        msgs,
+        lcd,
+      ));
+    } catch (e) {
+      dispatch(
+        transactionLoadingModalActions.setError(
+          //@ts-ignore
+          JSON.stringify(e.response.data),
+        ),
+      );
+      dispatch(transactionLoadingModalActions.stopLoading());
+      return;
+    }
     const tx: CreateTxOptions = {
       msgs,
       fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
@@ -177,12 +225,24 @@ export function MyBids() {
       null,
       collateralToken,
     );
-    const { estimatedFeeGas, coinAmount } = await estimateGasFee(
-      connectedWallet.network,
-      walletAddress,
-      msgs,
-      lcd,
-    );
+    let estimatedFeeGas, coinAmount;
+    try {
+      ({ estimatedFeeGas, coinAmount } = await estimateGasFee(
+        connectedWallet.network,
+        walletAddress,
+        msgs,
+        lcd,
+      ));
+    } catch (e) {
+      dispatch(
+        transactionLoadingModalActions.setError(
+          //@ts-ignore
+          JSON.stringify(e.response.data),
+        ),
+      );
+      dispatch(transactionLoadingModalActions.stopLoading());
+      return;
+    }
     const tx: CreateTxOptions = {
       msgs,
       fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),

@@ -1,4 +1,5 @@
 import {
+  Coin,
   Coins,
   Dec,
   LCDClient,
@@ -9,6 +10,7 @@ import { NetworkInfo } from '@terra-money/wallet-provider';
 import {
   ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS,
   DEFAULT_FALLBACK_GAS_PRICE,
+  GAS_BUFFER,
 } from 'app/constants';
 
 export interface GasEstimation {
@@ -22,19 +24,28 @@ export async function estimateGasFee(
   msgs: MsgExecuteContract[],
   lcd: LCDClient,
 ): Promise<GasEstimation> {
-  const tx = await lcd.tx.create([{ address: walletAddress }], {
-    msgs,
-    feeDenoms: ['uusd'],
-    gasPrices: DEFAULT_FALLBACK_GAS_PRICE(network),
-  });
-  const estimatedFeeGas = tx.auth_info.fee.amount
-    .toArray()
-    .reduce((gas, coin) => {
-      //@ts-ignore
-      const price = DEFAULT_FALLBACK_GAS_PRICE(network)[coin.denom];
-      return gas.add(coin.amount.div(price));
-    }, new Dec(0));
-  return { estimatedFeeGas, coinAmount: tx.auth_info.fee.amount };
+  try {
+    const tx = await lcd.tx.create([{ address: walletAddress }], {
+      msgs,
+      feeDenoms: ['uusd'],
+      gasPrices: DEFAULT_FALLBACK_GAS_PRICE(network),
+    });
+    const estimatedFeeGas = tx.auth_info.fee.amount
+      .toArray()
+      .reduce((gas, coin) => {
+        //@ts-ignore
+        const price = DEFAULT_FALLBACK_GAS_PRICE(network)[coin.denom];
+        return gas.add(coin.amount.div(price));
+      }, new Dec(0));
+    const coinAmount = tx.auth_info.fee.amount.add(
+      new Coin('uusd', GAS_BUFFER),
+    );
+    return { estimatedFeeGas, coinAmount };
+  } catch (e) {
+    //@ts-ignore
+    console.error(e.response.data);
+    throw e;
+  }
 }
 
 export function fabricateNewBid(
