@@ -1,4 +1,4 @@
-import { LCDClient } from '@terra-money/terra.js';
+import { Coin, LCDClient } from '@terra-money/terra.js';
 import { NetworkInfo } from '@terra-money/wallet-provider';
 import {
   selectLCDClient,
@@ -16,7 +16,18 @@ import { selectWalletAddress } from '../../MyBids/slice/selectors';
 import { selectCollateralToken } from '../../NewBidForm/slice/selectors';
 import { LiquidationProfile } from './types';
 
-// function* doSomething() {}
+function* getLunaPrice() {
+  const lcd: LCDClient = yield select(selectLCDClient);
+  const offerCoin = new Coin('uluna', '1000000');
+  const lunaPriceInOriginalDenom: Coin = yield lcd.market.swapRate(
+    offerCoin,
+    'uusd',
+  );
+  yield put(
+    actions.setLunaPrice(lunaPriceInOriginalDenom.amount.toNumber() / 1e6),
+  );
+}
+
 export function* getLiquidationProfile() {
   try {
     const liq: LiquidationProfile[] = yield call(
@@ -64,4 +75,5 @@ export function* getBidPool() {
 export function* analyticsSaga() {
   yield takeLatest(actions.getBidPool.type, getBidPool);
   yield takeLatest(actions.getLiquidationProfile.type, getLiquidationProfile);
+  yield takeLatest(actions.getLunaPrice.type, getLunaPrice);
 }

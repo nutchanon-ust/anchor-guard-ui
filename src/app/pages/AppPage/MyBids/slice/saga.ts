@@ -1,6 +1,6 @@
 import { call, put, select, takeLatest, delay } from 'redux-saga/effects';
 import { myBidsActions as actions } from '.';
-import { LCDClient } from '@terra-money/terra.js';
+import { Coin, LCDClient } from '@terra-money/terra.js';
 import { formatUnits } from 'ethers/lib/utils';
 import { ANCHOR_LIQUIDATION_QUEUE_CONTRACT_ADDRESS } from 'app/constants';
 import { selectWalletAddress } from './selectors';

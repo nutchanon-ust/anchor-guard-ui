@@ -12,8 +12,12 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAnalyticsSlice } from './slice';
 import { selectCollateralToken } from '../NewBidForm/slice/selectors';
-import { selectBidPools, selectLiquidationProfile } from './slice/selectors';
-import { Col, Row, Typography } from 'antd';
+import {
+  selectBidPools,
+  selectLiquidationProfile,
+  selectLunaPrice,
+} from './slice/selectors';
+import { Col, InputNumber, Row, Statistic, Typography } from 'antd';
 import { BLUNA_ADDRESS } from 'app/constants';
 import { selectNetwork } from 'app/components/WalletSelector/slice/selectors';
 import { BidPool } from './slice/types';
@@ -30,24 +34,23 @@ export function Analytics(props: Props) {
   const network = useSelector(selectNetwork);
   const collateralToken = useSelector(selectCollateralToken);
   const liquidationProfile = useSelector(selectLiquidationProfile);
+  const lunaPrice = useSelector(selectLunaPrice);
   const bidPools = useSelector(selectBidPools);
   let data: BidPool[] = [];
   let config: any;
+  let expectedLiquidatedLoanValue = 0;
 
   if (liquidationProfile?.length > 0) {
-    const lunaPrice = 57;
-    const liquidatedLoanValue = liquidationProfile
+    expectedLiquidatedLoanValue = liquidationProfile
       .filter(liq => {
         return liq.Luna_Liquidation_Price > lunaPrice;
       })
       .reduce((sum, liq) => {
         return sum + liq.Loan_Value;
       }, 0);
-    console.log('liquidatedLoanValue', liquidatedLoanValue);
-    let liquidatedLoanValueRemaining = liquidatedLoanValue;
+    let liquidatedLoanValueRemaining = expectedLiquidatedLoanValue;
     bidPools.forEach(pool => {
       const left = liquidatedLoanValueRemaining - pool.totalBidAmount;
-      console.log(`${pool.premium} ${left}`);
       data.push({
         premium: pool.premium,
         totalBidAmount:
@@ -63,7 +66,6 @@ export function Analytics(props: Props) {
 
       liquidatedLoanValueRemaining = left > 0 ? left : 0;
     });
-    console.log('data', data);
 
     config = {
       data,
@@ -109,6 +111,10 @@ export function Analytics(props: Props) {
     };
   }
 
+  const handlePriceChange = (value: number) => {
+    dispatch(actions.setLunaPrice(value));
+  };
+
   useEffect(() => {
     dispatch(actions.getBidPool());
   }, [collateralToken]);
@@ -116,20 +122,75 @@ export function Analytics(props: Props) {
   useEffect(() => {
     if (collateralToken === BLUNA_ADDRESS(network)) {
       dispatch(actions.getLiquidationProfile());
+      dispatch(actions.getLunaPrice());
     }
   }, [collateralToken]);
 
+  const collateralTokenName =
+    collateralToken === BLUNA_ADDRESS(network) ? 'bLUNA' : 'bETH';
+
   return (
     <Div>
-      <Title level={3}>Bid Pools</Title>
-      <Row style={{ marginTop: '15px', marginBottom: '15px' }}>
-        <Col offset={12} span={12}>
-          LUNA Price: $60.50
-        </Col>
-      </Row>
+      <Title level={3}>Bid Pools - {collateralTokenName}</Title>
+      {collateralToken === BLUNA_ADDRESS(network) && (
+        <Row>
+          <Col offset={12} span={12} style={{ textAlign: 'right' }}>
+            <p>
+              Change the LUNA price to simulate how much Bids will be filled.{' '}
+            </p>
+          </Col>
+          <SimulatorCol offset={12} span={12}>
+            <div>
+              <InputNumber
+                addonBefore="LUNA Price"
+                addonAfter={'$'}
+                value={lunaPrice}
+                onChange={handlePriceChange}
+              />
+            </div>
+            <div>
+              <a
+                href="#"
+                onClick={() => {
+                  dispatch(actions.getLunaPrice());
+                }}
+              >
+                Reset
+              </a>
+            </div>
+          </SimulatorCol>
+          <SimulatorCol offset={12} span={12}>
+            <Statistic
+              title="Estimated Liquidated Loan Value (UST)"
+              value={expectedLiquidatedLoanValue.toFixed(2)}
+            />
+          </SimulatorCol>
+          <Col
+            offset={12}
+            span={12}
+            style={{ textAlign: 'right', color: 'rgba(255, 255, 255, 0.45)' }}
+          >
+            The liquidation profiles data which make the simulation possible are
+            powered by{' '}
+            <a
+              href="https://app.alphadefi.fund/liq-profile"
+              target="_blank"
+              rel="noreferrer"
+            >
+              AlphaDefi
+            </a>
+            .
+          </Col>
+        </Row>
+      )}
       <Column {...config} />
     </Div>
   );
 }
 
 const Div = styled.div``;
+
+const SimulatorCol = styled(Col)`
+  text-align: right;
+  margin-bottom: 15px;
+`;

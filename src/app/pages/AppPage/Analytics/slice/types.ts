@@ -2,6 +2,7 @@
 export interface AnalyticsState {
   bidPools: BidPool[];
   liquidationProfile: LiquidationProfile[];
+  lunaPrice: number;
 }
 
 export interface BidPool {

@@ -16,3 +16,8 @@ export const selectLiquidationProfile = createSelector(
   [selectSlice],
   state => state.liquidationProfile,
 );
+
+export const selectLunaPrice = createSelector(
+  [selectSlice],
+  state => state.lunaPrice,
+);

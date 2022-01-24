@@ -7,6 +7,7 @@ import { AnalyticsState, BidPool, LiquidationProfile } from './types';
 export const initialState: AnalyticsState = {
   bidPools: [],
   liquidationProfile: [],
+  lunaPrice: 0,
 };
 
 const slice = createSlice({
@@ -15,6 +16,9 @@ const slice = createSlice({
   reducers: {
     getBidPool(state, action: PayloadAction) {
       state.bidPools = [];
+    },
+    getLunaPrice(state, action: PayloadAction) {
+      state.lunaPrice = 0;
     },
     getLiquidationProfile(state, action: PayloadAction) {
       state.liquidationProfile = [];
@@ -27,6 +31,9 @@ const slice = createSlice({
       action: PayloadAction<LiquidationProfile[]>,
     ) {
       state.liquidationProfile = action.payload;
+    },
+    setLunaPrice(state, action: PayloadAction<number>) {
+      state.lunaPrice = action.payload;
     },
   },
 });
