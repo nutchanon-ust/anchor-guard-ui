@@ -60,14 +60,19 @@ export function AppPage() {
             <a href="https://astroport.fi/" target={'_blank'} rel="noreferrer">
               Astroport
             </a>
+            |{' '}
+            <a
+              target={'_blank'}
+              rel="noreferrer"
+              href="mailto:anchor.guard.xyz@gmail.com
+"
+            >
+              Bug Report
+            </a>
           </div>
           <div>
-            DISCLAIMER: Anchor Guard interacts directly with Anchor Protocol
-            Smart Contract without any intermidiaries.
-          </div>
-          <div>
-            Use Anchor Guard at you own risk. The contributors of Anchor Guard
-            are not responsible for any loss of funds.
+            DISCLAIMER: Use Anchor Guard at you own risk. The contributors of
+            Anchor Guard are not responsible for any loss of funds.
           </div>
         </Footer>
       </PageWrapper>
