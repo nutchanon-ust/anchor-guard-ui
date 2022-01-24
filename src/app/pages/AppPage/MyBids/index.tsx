@@ -8,7 +8,11 @@ import {
 } from './slice/selectors';
 import { useMyBidsSlice } from './slice';
 import { Table, Button, Row, Col, Typography } from 'antd';
-import { useConnectedWallet, useLCDClient } from '@terra-money/wallet-provider';
+import {
+  ConnectType,
+  useConnectedWallet,
+  useLCDClient,
+} from '@terra-money/wallet-provider';
 import {
   estimateGasFee,
   fabricateActivateBid,
@@ -86,23 +90,7 @@ export function MyBids() {
       fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
       memo: APP_MEMO,
     };
-    try {
-      const signResult = await connectedWallet.sign(tx);
-      dispatch(transactionLoadingModalActions.startLoading());
-      const { isError, errorMessage } = validateBroadcastResult(
-        await lcd.tx.broadcast(signResult.result),
-      );
-      if (isError) {
-        dispatch(transactionLoadingModalActions.setError(errorMessage));
-      } else {
-        dispatch(actions.load());
-      }
-      dispatch(transactionLoadingModalActions.stopLoading());
-    } catch (e) {
-      console.error(e);
-      dispatch(transactionLoadingModalActions.setError(JSON.stringify(e)));
-      dispatch(transactionLoadingModalActions.stopLoading());
-    }
+    handleBroadcastTx(connectedWallet, tx);
   };
 
   const handleCancelBid = async bidIdx => {
@@ -119,23 +107,7 @@ export function MyBids() {
       fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
       memo: APP_MEMO,
     };
-    try {
-      const signResult = await connectedWallet.sign(tx);
-      dispatch(transactionLoadingModalActions.startLoading());
-      const { isError, errorMessage } = validateBroadcastResult(
-        await lcd.tx.broadcast(signResult.result),
-      );
-      if (isError) {
-        dispatch(transactionLoadingModalActions.setError(errorMessage));
-      } else {
-        dispatch(actions.load());
-      }
-      dispatch(transactionLoadingModalActions.stopLoading());
-    } catch (e) {
-      console.error(e);
-      dispatch(transactionLoadingModalActions.setError(JSON.stringify(e)));
-      dispatch(transactionLoadingModalActions.stopLoading());
-    }
+    handleBroadcastTx(connectedWallet, tx);
   };
 
   const handleClaimBid = async bidIdx => {
@@ -158,23 +130,7 @@ export function MyBids() {
       fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
       memo: APP_MEMO,
     };
-    try {
-      const signResult = await connectedWallet.sign(tx);
-      dispatch(transactionLoadingModalActions.startLoading());
-      const { isError, errorMessage } = validateBroadcastResult(
-        await lcd.tx.broadcast(signResult.result),
-      );
-      if (isError) {
-        dispatch(transactionLoadingModalActions.setError(errorMessage));
-      } else {
-        dispatch(actions.load());
-      }
-      dispatch(transactionLoadingModalActions.stopLoading());
-    } catch (e) {
-      console.error(e);
-      dispatch(transactionLoadingModalActions.setError(JSON.stringify(e)));
-      dispatch(transactionLoadingModalActions.stopLoading());
-    }
+    handleBroadcastTx(connectedWallet, tx);
   };
 
   useEffect(() => {
@@ -209,23 +165,7 @@ export function MyBids() {
       fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
       memo: APP_MEMO,
     };
-    try {
-      const signResult = await connectedWallet.sign(tx);
-      dispatch(transactionLoadingModalActions.startLoading());
-      const { isError, errorMessage } = validateBroadcastResult(
-        await lcd.tx.broadcast(signResult.result),
-      );
-      if (isError) {
-        dispatch(transactionLoadingModalActions.setError(errorMessage));
-      } else {
-        dispatch(actions.load());
-      }
-      dispatch(transactionLoadingModalActions.stopLoading());
-    } catch (e) {
-      console.error(e);
-      dispatch(transactionLoadingModalActions.setError(JSON.stringify(e)));
-      dispatch(transactionLoadingModalActions.stopLoading());
-    }
+    handleBroadcastTx(connectedWallet, tx);
   };
 
   const handleClaimAll = async () => {
@@ -248,18 +188,30 @@ export function MyBids() {
       fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
       memo: APP_MEMO,
     };
+    handleBroadcastTx(connectedWallet, tx);
+  };
+
+  const handleBroadcastTx = async (connectedWallet, tx) => {
     try {
-      const signResult = await connectedWallet.sign(tx);
-      dispatch(transactionLoadingModalActions.startLoading());
-      const { isError, errorMessage } = validateBroadcastResult(
-        await lcd.tx.broadcast(signResult.result),
-      );
-      if (isError) {
-        dispatch(transactionLoadingModalActions.setError(errorMessage));
-      } else {
-        dispatch(actions.load());
+      if (connectedWallet.connectType === ConnectType.EXTENSION) {
+        const signResult = await connectedWallet.sign(tx);
+        dispatch(transactionLoadingModalActions.startLoading());
+        const { isError, errorMessage } = validateBroadcastResult(
+          await lcd.tx.broadcast(signResult.result),
+        );
+        if (isError) {
+          dispatch(transactionLoadingModalActions.setError(errorMessage));
+        } else {
+          dispatch(actions.load());
+        }
+        dispatch(transactionLoadingModalActions.stopLoading());
+      } else if (connectedWallet.connectType === ConnectType.WALLETCONNECT) {
+        const result = await connectedWallet.post(tx);
+        console.log(result);
+        if (result.success) {
+          dispatch(transactionLoadingModalActions.stopLoading());
+        }
       }
-      dispatch(transactionLoadingModalActions.stopLoading());
     } catch (e) {
       console.error(e);
       dispatch(transactionLoadingModalActions.setError(JSON.stringify(e)));

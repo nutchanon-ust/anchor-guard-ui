@@ -15,6 +15,7 @@ import {
 } from '@terra-money/terra.js';
 import {
   ConnectedWallet,
+  ConnectType,
   useConnectedWallet,
   useLCDClient,
 } from '@terra-money/wallet-provider';
@@ -98,17 +99,25 @@ export function NewBidForm(props: Props) {
       memo: APP_MEMO,
     };
     try {
-      const signResult = await connectedWallet.sign(tx);
-      dispatch(transactionLoadingModalActions.startLoading());
-      const { isError, errorMessage } = validateBroadcastResult(
-        await lcd.tx.broadcast(signResult.result),
-      );
-      if (isError) {
-        dispatch(transactionLoadingModalActions.setError(errorMessage));
-      } else {
-        dispatch(myBidsActions.load());
+      if (connectedWallet.connectType === ConnectType.EXTENSION) {
+        const signResult = await connectedWallet.sign(tx);
+        dispatch(transactionLoadingModalActions.startLoading());
+        const { isError, errorMessage } = validateBroadcastResult(
+          await lcd.tx.broadcast(signResult.result),
+        );
+        if (isError) {
+          dispatch(transactionLoadingModalActions.setError(errorMessage));
+        } else {
+          dispatch(myBidsActions.load());
+        }
+        dispatch(transactionLoadingModalActions.stopLoading());
+      } else if (connectedWallet.connectType === ConnectType.WALLETCONNECT) {
+        const result = await connectedWallet.post(tx);
+        console.log(result);
+        if (result.success) {
+          dispatch(transactionLoadingModalActions.stopLoading());
+        }
       }
-      dispatch(transactionLoadingModalActions.stopLoading());
     } catch (e) {
       console.error(e);
       dispatch(transactionLoadingModalActions.setError(JSON.stringify(e)));
