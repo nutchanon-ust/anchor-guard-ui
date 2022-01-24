@@ -15,7 +15,7 @@ export function AppPage() {
   return (
     <>
       <Alert
-        message="Anchor Guard or any website will never ask for your seed phrase/mnemonic keys. Do not ever give them to anyone."
+        message="Please make sure that you are on https://anchor-guard.xyz - Anchor Guard or any website will never ask for your seed phrase/mnemonic keys. Do not ever give them to anyone."
         type="warning"
         showIcon
         closable

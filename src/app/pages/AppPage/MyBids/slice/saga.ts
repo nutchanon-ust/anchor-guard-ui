@@ -24,7 +24,7 @@ export function* getMyBids() {
           collateral_token: collateralToken,
           bidder: walletAddress,
         },
-      }, // query msg
+      },
     );
     if (result) {
       yield put(

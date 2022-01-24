@@ -2,6 +2,10 @@
 
 This repository contains the code for Anchor Guard, the web application which interact with Anchor Liquidation Queue Smart Contract to participate in liquidations of [Anchor Protocol](https://www.anchorprotocol.com/). The web application is made public and open-source for transparency and for free accesss to anyone who wish to participate in Anchor Protocol liquidation. There is no additional charge for using the service of Anchor Guard.
 
+## Using Anchor Guard from a hosted service
+
+Please visit https://anchor-guard.xyz
+
 ## Running Anchor Guard on your local machine
 
 1. Install [Node.js](https://nodejs.org/en/download/)

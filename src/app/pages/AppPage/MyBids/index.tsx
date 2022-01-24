@@ -20,6 +20,7 @@ import { CreateTxOptions, Fee, LCDClient } from '@terra-money/terra.js';
 import { Bid } from './slice/types';
 import { selectCollateralToken } from '../NewBidForm/slice/selectors';
 import { useTransactionLoadingModalSlice } from 'app/components/TransactionLoadingModal/slice';
+import { APP_MEMO } from 'app/constants';
 
 const { Title } = Typography;
 const { Column } = Table;
@@ -83,6 +84,7 @@ export function MyBids() {
     const tx: CreateTxOptions = {
       msgs,
       fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
+      memo: APP_MEMO,
     };
     try {
       const signResult = await connectedWallet.sign(tx);
@@ -98,7 +100,7 @@ export function MyBids() {
       dispatch(transactionLoadingModalActions.stopLoading());
     } catch (e) {
       console.error(e);
-      dispatch(transactionLoadingModalActions.setError('error'));
+      dispatch(transactionLoadingModalActions.setError(JSON.stringify(e)));
       dispatch(transactionLoadingModalActions.stopLoading());
     }
   };
@@ -115,6 +117,7 @@ export function MyBids() {
     const tx: CreateTxOptions = {
       msgs,
       fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
+      memo: APP_MEMO,
     };
     try {
       const signResult = await connectedWallet.sign(tx);
@@ -130,7 +133,7 @@ export function MyBids() {
       dispatch(transactionLoadingModalActions.stopLoading());
     } catch (e) {
       console.error(e);
-      dispatch(transactionLoadingModalActions.setError('error'));
+      dispatch(transactionLoadingModalActions.setError(JSON.stringify(e)));
       dispatch(transactionLoadingModalActions.stopLoading());
     }
   };
@@ -153,6 +156,7 @@ export function MyBids() {
     const tx: CreateTxOptions = {
       msgs,
       fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
+      memo: APP_MEMO,
     };
     try {
       const signResult = await connectedWallet.sign(tx);
@@ -168,7 +172,7 @@ export function MyBids() {
       dispatch(transactionLoadingModalActions.stopLoading());
     } catch (e) {
       console.error(e);
-      dispatch(transactionLoadingModalActions.setError('error'));
+      dispatch(transactionLoadingModalActions.setError(JSON.stringify(e)));
       dispatch(transactionLoadingModalActions.stopLoading());
     }
   };
@@ -203,6 +207,7 @@ export function MyBids() {
     const tx: CreateTxOptions = {
       msgs,
       fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
+      memo: APP_MEMO,
     };
     try {
       const signResult = await connectedWallet.sign(tx);
@@ -218,7 +223,7 @@ export function MyBids() {
       dispatch(transactionLoadingModalActions.stopLoading());
     } catch (e) {
       console.error(e);
-      dispatch(transactionLoadingModalActions.setError('error'));
+      dispatch(transactionLoadingModalActions.setError(JSON.stringify(e)));
       dispatch(transactionLoadingModalActions.stopLoading());
     }
   };
@@ -241,6 +246,7 @@ export function MyBids() {
     const tx: CreateTxOptions = {
       msgs,
       fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
+      memo: APP_MEMO,
     };
     try {
       const signResult = await connectedWallet.sign(tx);
@@ -256,7 +262,7 @@ export function MyBids() {
       dispatch(transactionLoadingModalActions.stopLoading());
     } catch (e) {
       console.error(e);
-      dispatch(transactionLoadingModalActions.setError('error'));
+      dispatch(transactionLoadingModalActions.setError(JSON.stringify(e)));
       dispatch(transactionLoadingModalActions.stopLoading());
     }
   };

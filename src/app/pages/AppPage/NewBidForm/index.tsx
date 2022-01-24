@@ -18,7 +18,7 @@ import {
   useConnectedWallet,
   useLCDClient,
 } from '@terra-money/wallet-provider';
-import { BETH_ADDRESS, BLUNA_ADDRESS } from 'app/constants';
+import { APP_MEMO, BETH_ADDRESS, BLUNA_ADDRESS } from 'app/constants';
 import { useCallback, useEffect } from 'react';
 import {
   estimateGasFee,
@@ -95,6 +95,7 @@ export function NewBidForm(props: Props) {
     const tx: CreateTxOptions = {
       msgs,
       fee: new Fee(estimatedFeeGas.toNumber(), coinAmount),
+      memo: APP_MEMO,
     };
     try {
       const signResult = await connectedWallet.sign(tx);
@@ -110,7 +111,7 @@ export function NewBidForm(props: Props) {
       dispatch(transactionLoadingModalActions.stopLoading());
     } catch (e) {
       console.error(e);
-      dispatch(transactionLoadingModalActions.setError('error'));
+      dispatch(transactionLoadingModalActions.setError(JSON.stringify(e)));
       dispatch(transactionLoadingModalActions.stopLoading());
     }
   };

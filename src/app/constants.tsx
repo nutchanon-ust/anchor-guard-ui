@@ -1,5 +1,7 @@
 import { NetworkInfo } from '@terra-money/wallet-provider';
 
+export const APP_MEMO = 'anchor-guard.xyz';
+
 export const ANCHOR_LIQUIDATION_QUEUE_MAINNET_CONTRACT_ADDRESS =
   'terra1e25zllgag7j9xsun3me4stnye2pcg66234je3u';
 export const ANCHOR_LIQUIDATION_QUEUE_TESTNET_CONTRACT_ADDRESS =
