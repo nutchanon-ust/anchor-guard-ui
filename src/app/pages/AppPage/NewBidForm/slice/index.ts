@@ -1,4 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
+import { BLUNA_MAINNET_ADDRESS } from 'app/constants';
 import { formatUnits } from 'ethers/lib/utils';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
@@ -7,7 +8,7 @@ import { NewBidState } from './types';
 
 export const initialState: NewBidState = {
   userUstBalance: 0,
-  collateralToken: null,
+  collateralToken: BLUNA_MAINNET_ADDRESS,
 };
 
 const slice = createSlice({
