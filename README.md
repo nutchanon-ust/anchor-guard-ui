@@ -13,6 +13,10 @@ Please visit https://anchor-guard.xyz
 3. Run `yarn install` to install all the dependencies
 4. Run `yarn start` and Anchor Guard will be live on your http://localhost:3000/
 
+## Bug Report
+
+Send an email to anchor.guard.xyz@gmail.com
+
 ## License
 
 This project is licensed under the MIT license.

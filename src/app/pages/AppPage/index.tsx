@@ -7,6 +7,7 @@ import { MyBids } from './MyBids';
 import { NewBidForm } from './NewBidForm';
 import { TransactionLoadingModal } from 'app/components/TransactionLoadingModal';
 import styled from 'styled-components';
+import { Analytics } from './Analytics';
 
 const { Title } = Typography;
 const { Footer } = Layout;
@@ -35,6 +36,7 @@ export function AppPage() {
           Anchor Liquidation Queue User Interface; Open Source, Free to Use and
           No Fee
         </Title>
+        <Analytics />
         <NewBidForm />
         <MyBids />
         <TransactionLoadingModal />

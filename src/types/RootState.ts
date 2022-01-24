@@ -3,6 +3,7 @@ import { ThemeState } from 'styles/theme/slice/types';
 import { NewBidState } from 'app/pages/AppPage/NewBidForm/slice/types';
 import { WalletConnectionState } from 'app/components/WalletSelector/slice/types';
 import { TransactionLoadingModalState } from 'app/components/TransactionLoadingModal/slice/types';
+import { AnalyticsState } from 'app/pages/AppPage/Analytics/slice/types';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
 /* 
@@ -17,5 +18,6 @@ export interface RootState {
   newBid?: NewBidState;
   walletConnection?: WalletConnectionState;
   transactionLoadingModal?: TransactionLoadingModalState;
+  analytics?: AnalyticsState;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }

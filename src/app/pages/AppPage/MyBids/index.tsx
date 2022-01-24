@@ -207,7 +207,6 @@ export function MyBids() {
         dispatch(transactionLoadingModalActions.stopLoading());
       } else if (connectedWallet.connectType === ConnectType.WALLETCONNECT) {
         const result = await connectedWallet.post(tx);
-        console.log(result);
         if (result.success) {
           dispatch(transactionLoadingModalActions.stopLoading());
         }
@@ -221,7 +220,7 @@ export function MyBids() {
 
   return (
     <>
-      <Title level={2}>My Bids</Title>
+      <Title level={3}>My Bids</Title>
       <div style={{ textAlign: 'right' }}>
         <Button
           style={{ margin: '5px' }}

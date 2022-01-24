@@ -113,7 +113,6 @@ export function NewBidForm(props: Props) {
         dispatch(transactionLoadingModalActions.stopLoading());
       } else if (connectedWallet.connectType === ConnectType.WALLETCONNECT) {
         const result = await connectedWallet.post(tx);
-        console.log(result);
         if (result.success) {
           dispatch(transactionLoadingModalActions.stopLoading());
         }
@@ -132,10 +131,9 @@ export function NewBidForm(props: Props) {
   };
 
   const userUstBalance = useSelector(selectUserUstBalance);
-  console.log('userUstBalance', userUstBalance);
   return (
     <>
-      <Title level={2}>New Bid</Title>
+      <Title level={3}>New Bid</Title>
       <Form
         form={form}
         name="basic"
