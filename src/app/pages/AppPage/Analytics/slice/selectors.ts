@@ -11,3 +11,8 @@ export const selectBidPools = createSelector(
   [selectSlice],
   state => state.bidPools,
 );
+
+export const selectLiquidationProfile = createSelector(
+  [selectSlice],
+  state => state.liquidationProfile,
+);

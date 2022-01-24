@@ -10,11 +10,24 @@ import {
 } from 'app/constants';
 import { formatUnits } from 'ethers/lib/utils';
 import { take, call, put, select, takeLatest } from 'redux-saga/effects';
+import { request } from 'utils/request';
 import { analyticsActions as actions } from '.';
 import { selectWalletAddress } from '../../MyBids/slice/selectors';
 import { selectCollateralToken } from '../../NewBidForm/slice/selectors';
+import { LiquidationProfile } from './types';
 
 // function* doSomething() {}
+export function* getLiquidationProfile() {
+  try {
+    const liq: LiquidationProfile[] = yield call(
+      request,
+      'https://api.alphadefi.fund/historical/kujira/profile',
+    );
+    yield put(actions.liquidationProfileLoaded(liq));
+  } catch (e) {
+    yield put(actions.liquidationProfileLoaded([]));
+  }
+}
 
 export function* getBidPool() {
   const lcd: LCDClient = yield select(selectLCDClient);
@@ -50,4 +63,5 @@ export function* getBidPool() {
 
 export function* analyticsSaga() {
   yield takeLatest(actions.getBidPool.type, getBidPool);
+  yield takeLatest(actions.getLiquidationProfile.type, getLiquidationProfile);
 }
